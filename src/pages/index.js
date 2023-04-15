@@ -23,7 +23,7 @@ const Home = () => {
                     <div class="mx-auto w-full md:w-3/4 md:my-5 p-5">
                         <p class="text-6xl tracking-tight text-center">¿Lo pensaste?, <b class="text-orange-600">búscalo</b></p>
                     </div>
-                    <form class="w-full m-auto md:w-1/3">   
+                    <form class="w-full m-auto 2xl:w-1/3">   
                         <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">

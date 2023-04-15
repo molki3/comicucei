@@ -3,6 +3,7 @@ import Image from "next/image"
 import logo from "../../public/logo.png"
 import { useState } from "react"
 import axios from "axios"   //hacer peticiones al backend
+import { useRouter } from "next/router"
 
 export default function Login() {
     
@@ -10,6 +11,8 @@ export default function Login() {
         codigo:'',
         password:''
     })
+
+    const router = useRouter();
     
     const handleChange = (e) =>{        //captura el contenido de los inputs
         setCredentials({
@@ -22,14 +25,16 @@ export default function Login() {
         e.preventDefault();     //evitar que se vean las credenciales en el url
         //console.log(credentials);
         const response = await axios.post('/api/auth/login', credentials);
-        console.log(response)
+        if(response.data=='login succesfully'){
+            router.push('/');
+        }
     }
 
   return (
     <section class="bg-white">
       <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 h-screen">
           <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-              <Image class={"w-20 h-20"} src={logo}></Image>  
+              <Image class={"w-20 h-20"} src={logo} alt="ComiCucei"></Image>  
           </a>
           <div class="w-full rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0 bg-gray-900">
               <div class="p-6 space-y-4 md:space-y-6 sm:p-8">

@@ -5,7 +5,9 @@ const loginHandler = (req, res) =>{
 
     const {codigo, password} = req.body;
 
-    console.log(codigo, password);
+    console.log("DESDE API LOGIN: ",codigo, password);
+
+    //AQUI HACER CONEXION Y EXTRACCION DE DATOS POR LA BASE DE DATOS
 
     //PRUEBA A MANO
     if(codigo=='220790806' && password=='123'){
@@ -17,10 +19,10 @@ const loginHandler = (req, res) =>{
         }, 'secret')
 
         const serialized = serialize('tokenUser', token, {    //serializar el token para establecerlo como cookie de forma segura
-        httpOnly: true,                                         //el token no podrá ser visot desde herramientas de desarrollador ni navegador
-        secure: process.env.NODE_ENV === 'production',          //si esta en produccion, pon la seguridad en true
-        sameSite: 'strict',                                     //poderse comunicar con distintos backends
-        path: '/'                                  
+            httpOnly: true,                                         //el token no podrá ser visot desde herramientas de desarrollador ni navegador
+            secure: process.env.NODE_ENV === 'production',          //si esta en produccion, pon la seguridad en true
+            sameSite: 'strict',                                     //poderse comunicar con distintos backends
+            path: '/'                                  
         })   
 
         res.setHeader('Set-Cookie', serialized);     //mandar el token serializado al frontend por medio de la cabecera
