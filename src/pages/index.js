@@ -1,9 +1,10 @@
 import Footer from "@sspis-comicucei/components/footer"
 import Menu from "@sspis-comicucei/components/menu"
 import Separador from "@sspis-comicucei/components/separador"
+import axios from "axios"
 
 const Home = () => {
-    
+
     return(
         <section class="bg-white text-black">
             <Menu/>
@@ -45,8 +46,8 @@ const Home = () => {
                         </p>
                     </div>
                 </div>
-                <div>
-                    
+                <div class="mx-auto w-full md:my-10 mb-10 h-screen bg-gray-900 text-white">
+                    PRODUCTOS RECOMENDADOS
                 </div>
             </div>
             {/*MAIN*/}

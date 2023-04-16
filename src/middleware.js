@@ -6,7 +6,7 @@ export async function middleware(request){
     //EXTRAER EL TOKEN CON JOSE
     const token = request.cookies.get('tokenUser');
     
-    if(request.nextUrl.pathname.includes("/")){
+
         //VALIDA QUE HAYA UN TOKEN
         if(token==undefined){
             return NextResponse.redirect(new URL("/login", request.url));
@@ -21,8 +21,8 @@ export async function middleware(request){
             console.error(error);
             return NextResponse.redirect(new URL('/login', request.url));
         }
-    }
+}
 
-    return NextResponse.next();
-
+export const config = {
+    matcher: ['/x','/']
 }
