@@ -1,3 +1,4 @@
+import Footer from "@sspis-comicucei/components/footer"
 import { useState } from "react"
 import axios from "axios"   //hacer peticiones al backend
 import { useRouter } from "next/router"
@@ -42,8 +43,8 @@ export default function ProductForm(){
     }
 
     return(
-        <section class="bg-white my-10">
-        <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
+        <section class="bg-white">
+        <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 h-screen">
             <a onClick={routerHome} class="cursor-pointer flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
                 <Image class={"w-20 h-20"} src={logo} alt="ComiCucei"></Image>  
             </a>
@@ -81,6 +82,7 @@ export default function ProductForm(){
                 <h3 id="mensaje" class="text-white text-center text-lg p-3 "></h3>
             </div>
         </div>
+        <Footer></Footer>
     </section>
     )
 }  
