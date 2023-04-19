@@ -6,11 +6,9 @@ const loginHandler = async (req, res) =>{
 
     const {codigo, nombre, password} = req.body;
 
-    console.log("DESDE API LOGIN: ",codigo, nombre, password);
 
     //AQUI HACER CONEXION Y EXTRACCION DE DATOS POR LA BASE DE DATOS
     const response = await conn.query(`select * from usuario where codigo='${codigo}'`);
-    console.log(response)
 
     if(!response.rows[0]){
         await conn.query(`insert into usuario (codigo, nombre, password) values ('${codigo}', '${nombre}','${password}')`);
