@@ -3,6 +3,7 @@ import logo from "../../public/logo.png"
 import axios from "axios"
 import { useState } from "react"
 import { useRouter } from "next/router"
+import Separador from "./separador"
 
 const Menu = () => {
     
@@ -82,6 +83,7 @@ const Menu = () => {
                         <li>
                             <a class="block px-4 py-2 ">Nombre: {user.nombre}</a>
                         </li>
+                        <Separador></Separador>
                         <li>
                             <a onClick={logout} class="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Cerrar sesión</a>
                         </li>

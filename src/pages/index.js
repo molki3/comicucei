@@ -2,9 +2,12 @@ import Footer from "@sspis-comicucei/components/footer"
 import Menu from "@sspis-comicucei/components/menu"
 import Separador from "@sspis-comicucei/components/separador"
 import axios from "axios"
+import logo from "../../public/logo.png"
+import Image from "next/image"
 
-const Home = () => {
-
+const Home = ({products}) => {
+    products = products.rows;
+    console.log(products);
     return(
         <section class="bg-white text-black">
             <Menu/>
@@ -46,14 +49,30 @@ const Home = () => {
                         </p>
                     </div>
                 </div>
-                <div class="mx-auto w-full md:my-10 mb-10 h-screen bg-gray-900 text-white">
-                    PRODUCTOS RECOMENDADOS
+                <div class="mx-auto w-full mb-10 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {products.map(product => (
+                        <div key={product.id} class="grid-col-2">
+                            <Image class="h-60 bg-gray-200" src="" alt="Producto Logo"/>
+                            <h1 class="font-bold text-2xl">{product.nombre}</h1>
+                            <p>{product.momento}</p>
+                            <p>${product.precio}</p>
+                        </div>
+                    ))}
                 </div>
             </div>
             {/*MAIN*/}
             <Footer/>
         </section>
     )
+}
+
+export const getServerSideProps = async context => {
+    const {data : products} = await axios.get('http://localhost:3000/api/products');
+    return{
+        props:{
+            products
+        }
+    }
 }
 
 export default Home
