@@ -2,7 +2,6 @@ import Footer from "@sspis-comicucei/components/footer"
 import Menu from "@sspis-comicucei/components/menu"
 import Separador from "@sspis-comicucei/components/separador"
 import axios from "axios"
-import logo from "../../public/logo.png"
 import Image from "next/image"
 
 const Home = ({products}) => {
@@ -13,7 +12,7 @@ const Home = ({products}) => {
             <Menu/>
             {/*MAIN*/}
             <Separador/>
-            <div class="w-3/4 mx-auto flex flex-col ml-100 p-0">
+            <div class="w-full mx-auto flex flex-col ml-100 p-0 bg-[url('../../public/fondo.jpg')] bg-cover bg-center">
                 <div class="mx-auto w-full md:w-3/4 md:my-5 md:pt-5">
                     <p class="text-6xl tracking-tight">Compra comida en tu cafetería favorita</p>
                     <p class="text-8xl font-bold tracking-tight text-orange-600">sin hacer largas filas</p>
@@ -23,6 +22,8 @@ const Home = ({products}) => {
                         Hemos innovado para ti, <b class="text-3xl">universitario</b>. En <b class="text-3xl">ComiCucei</b>, ahora podrás pedir tu comida favorita <b class="text-3xl">dentro de tu escuela</b> y recogerla <b class="text-3xl">cuando quieras y puedas</b>.
                     </p>
                 </div>
+            </div>
+            <div class="md:w-3/4 w-5/6 mx-auto flex flex-col ml-100 p-0">
                 <Separador/>
                 <div class="mx-auto w-full md:w-3/4 md:py-10 mb-10">
                     <div class="mx-auto w-full md:w-3/4 md:my-5 p-5">
@@ -50,14 +51,48 @@ const Home = ({products}) => {
                         </p>
                     </div>
                 </div>
-                <div class="mx-auto w-full mb-10 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="mx-auto w-full mb-10 grid grid-cols-1 md:grid xl:grid-cols-2 gap-4">
                     {products.map(product => (
-                        <div key={product.id} class="grid-col-2">
-                            <Image class="h-60 bg-gray-200" src="" alt="Producto Logo"/>
-                            <h1 class="font-bold text-2xl">{product.nombre}</h1>
-                            <p>{product.momento}</p>
-                            <p>{product.origen}</p>
-                            <p>${product.precio}</p>
+                        <div key={product.id} class="grid grid-cols-2 justify-items-center">
+                            <Image class="h-60 w-full bg-gray-200 border-black" src="" alt="Producto Logo"/>
+                            <div class="text-center grid grid-cols-1 content-around w-full">
+                                <p class="font-bold text-3xl">{product.nombre}</p>
+
+                                {product.momento=='Bebida' ? (
+                                    <div class="flex justify-center">
+                                        <p>{product.momento}</p>
+                                    </div>
+                                ) : null}
+                                {product.momento=='Postre' ? (
+                                    <div class="flex justify-center">
+                                        <p>{product.momento}</p>
+                                    </div>    
+                                ) : null}
+                                {product.momento=='Principal' ? (
+                                    <div class="flex justify-center">
+                                        <p>{product.momento}</p>
+                                    </div>
+                                ) : null}
+                                {product.momento=='Entrada' ? (
+                                    <div class="flex justify-center">
+                                        <p>{product.momento}</p>
+                                    </div>
+                                ) : null}
+
+                                <h1 class="text-xl">{product.origen}</h1>
+                                <p class="text-2xl">${product.precio}</p>
+
+                                <div class="flex justify-around">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                    </svg>
+                                    <p class="text-xl">{0}</p>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+                                    </svg>
+                                </div>
+                                
+                            </div>
                         </div>
                     ))}
                 </div>
