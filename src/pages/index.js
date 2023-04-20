@@ -12,6 +12,7 @@ const Home = ({products}) => {
         <section class="bg-white text-black">
             <Menu/>
             {/*MAIN*/}
+            <Separador/>
             <div class="w-3/4 mx-auto flex flex-col ml-100 p-0">
                 <div class="mx-auto w-full md:w-3/4 md:my-5 md:pt-5">
                     <p class="text-6xl tracking-tight">Compra comida en tu cafetería favorita</p>
@@ -55,6 +56,7 @@ const Home = ({products}) => {
                             <Image class="h-60 bg-gray-200" src="" alt="Producto Logo"/>
                             <h1 class="font-bold text-2xl">{product.nombre}</h1>
                             <p>{product.momento}</p>
+                            <p>{product.origen}</p>
                             <p>${product.precio}</p>
                         </div>
                     ))}

@@ -52,7 +52,7 @@ const Menu = () => {
     
 
     return(
-        <nav class="rounded-t-lg shadow dark:bg-gray-900 dark:text-white"> {/*m-4 my-0 rounded-b-lg*/}
+        <nav class="dark:bg-gray-900 dark:text-white"> {/*m-4 my-0 rounded-b-lg*/}
             <div class="container max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <a onClick={routerHome} class="cursor-pointer flex items-center">
                     <Image class={"h-10 w-10 mr-2"} src={logo} alt="ComiCucei Logo"></Image>

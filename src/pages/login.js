@@ -37,7 +37,7 @@ export default function Login() {
     }
 
   return (
-    <section class="bg-white">
+    <section class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
         <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 h-screen">
             <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
                 <Image class={"w-20 h-20"} src={logo} alt="ComiCucei"></Image>  
