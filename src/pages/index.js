@@ -60,22 +60,22 @@ const Home = ({products}) => {
 
                                 {product.momento=='Bebida' ? (
                                     <div class="flex justify-center">
-                                        <p>{product.momento}</p>
+                                        <p>Platillo: {product.momento}</p>
                                     </div>
                                 ) : null}
                                 {product.momento=='Postre' ? (
                                     <div class="flex justify-center">
-                                        <p>{product.momento}</p>
+                                        <p>Platillo: {product.momento}</p>
                                     </div>    
                                 ) : null}
                                 {product.momento=='Principal' ? (
                                     <div class="flex justify-center">
-                                        <p>{product.momento}</p>
+                                        <p>Platillo: {product.momento}</p>
                                     </div>
                                 ) : null}
                                 {product.momento=='Entrada' ? (
                                     <div class="flex justify-center">
-                                        <p>{product.momento}</p>
+                                        <p>Platillo: {product.momento}</p>
                                     </div>
                                 ) : null}
 
@@ -83,11 +83,11 @@ const Home = ({products}) => {
                                 <p class="text-2xl">${product.precio}</p>
 
                                 <div class="flex justify-around">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                     </svg>
                                     <p class="text-xl">{0}</p>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
                                     </svg>
                                 </div>
