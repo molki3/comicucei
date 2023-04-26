@@ -3,10 +3,22 @@ import Menu from "@sspis-comicucei/components/menu"
 import Separador from "@sspis-comicucei/components/separador"
 import axios from "axios"
 import Image from "next/image"
+import { useState } from "react"
 
 const Home = ({products}) => {
+
+    const [allProducts, setAllProducts] = useState([]);
+    const [total, settotal] = useState(0)
+    const [countProducts, setCountProducts] = useState(0)
+
     products = products.rows;
     console.log(products);
+
+    const addProduct = (product) =>{
+        setAllProducts([...allProducts, product]);
+    }
+    console.log(allProducts);
+
     return(
         <section class="bg-white text-black">
             <Menu/>
@@ -54,7 +66,7 @@ const Home = ({products}) => {
                 <div class="mx-auto w-full mb-10 grid grid-cols-1 md:grid xl:grid-cols-2 gap-4">
                     {products.map(product => (
                         <div key={product.id} class="grid grid-cols-2 justify-items-center">
-                            <Image class="h-60 w-full bg-gray-200 border-black" src="" alt="Producto Logo"/>
+                            <Image class="h-60 w-full bg-gray-200 border-black" src="" alt="Alimento"/>
                             <div class="text-center grid grid-cols-1 content-around w-full">
                                 <p class="font-bold text-3xl">{product.nombre}</p>
 
@@ -83,7 +95,7 @@ const Home = ({products}) => {
                                 <p class="text-2xl">${product.precio}</p>
 
                                 <div class="flex justify-around">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer">
+                                    <svg onClick={() => addProduct(product)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                     </svg>
                                     <p class="text-xl">{0}</p>

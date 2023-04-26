@@ -1,8 +1,12 @@
 import Menu from "@sspis-comicucei/components/menu"
 import Footer from "@sspis-comicucei/components/footer"
 import Separador from "@sspis-comicucei/components/separador"
+import { useState } from "react"
 
 const Carrito = () =>{
+
+    
+
     return(
         <section class="bg-white text-black">
             <Menu/>
