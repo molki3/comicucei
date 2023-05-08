@@ -8,46 +8,62 @@ import Carrito from "./carrito"
 
 const Home = ({products}) => {
 
-    const [onCarrito, setOnCarrito] = useState(true)
+    const [onCarrito, setOnCarrito] = useState(false)
 
     const [allProducts, setAllProducts] = useState([]);
-    const [total, settotal] = useState(0)
+    const [total, setTotal] = useState(0)
     const [countProducts, setCountProducts] = useState(0)
 
     products = products.rows;
-    console.log(products);
+
+    
 
 
     const addProduct = (product) =>{
-        setAllProducts([...allProducts, product]);
-    }
-    console.log(allProducts);
 
-    let n=0;
+        if(allProducts.find(item => item.idproducto == product.idproducto)){
+            setTotal(total+parseFloat(product.precio));
+            const products = allProducts.map(item =>
+                item.idproducto == product.idproducto ?
+                {...item, cantidad: item.cantidad + 1, subtotal: parseFloat(item.subtotal) + parseFloat(item.precio)} 
+                : item
+            );
+            return setAllProducts([...products]);
+        }
+        else{
+            setTotal(total+parseFloat(product.precio));
+            product.cantidad=1;
+            product.subtotal = parseFloat(product.precio);
+            console.log(product)
+            setAllProducts([...allProducts, product]);  
+        }
+        
+    }
+
+    console.log(allProducts);
 
     return(
         // <section class="bg-white text-black flex grid md:grid-cols-4 grid-cols-1"> 
-        <section class="bg-white text-black"> 
+        <section class="bg-white w-full"> 
             <div class="w-full">
                 <Menu setOnCarrito={setOnCarrito} onCarrito={onCarrito}/>
                 {/*MAIN*/}
-                <Separador/>
-                <div class="w-full mx-auto flex flex-col ml-100 p-0 bg-[url('../../public/fondo.jpg')] bg-cover bg-center">
-                    <div class="mx-auto w-full md:w-3/4 md:my-5 md:pt-5">
-                        <p class="text-6xl tracking-tight">Compra comida en tu cafetería favorita</p>
-                        <p class="text-8xl font-bold tracking-tight text-orange-600">sin hacer largas filas</p>
+                <div class="mx-auto flex flex-col p-0 bg-[url('../../public/fondo4.jpg')] dark:bg-[url('../../public/fondo1.jpg')] bg-cover bg-bottom dark:text-white text-dark">
+                    <div class="mx-5 w-full md:w-2/4 md:my-5 md:pt-5">
+                        <p class="md:text-5xl text-2xl font-bold tracking-tight">Compra comida en tu cafetería favorita</p>
+                        <p class="md:text-8xl text-5xl font-bold tracking-tight text-orange-600">sin hacer largas filas</p>
                     </div>
-                    <div class="mx-auto w-full md:w-3/4 my-5 md:pb-10 pb-5">
-                        <p class="text-2xl leading-loose tracking-tight ">
-                            Hemos innovado para ti, <b class="text-3xl">universitario</b>. En <b class="text-3xl">ComiCucei</b>, ahora podrás pedir tu comida favorita <b class="text-3xl">dentro de tu escuela</b> y recogerla <b class="text-3xl">cuando quieras y puedas</b>.
+                    <div class="mx-5 w-full md:w-2/4 my-5 md:pb-10 pb-5">
+                        <p class="md:text-2xl text-lg leading-loose tracking-tight text-justify">
+                            Hemos innovado para ti, <b class="md:text-3xl text-xl">universitario</b>. En <b class="md:text-3xl text-xl">ComiCucei</b>, ahora podrás pedir tu comida favorita <b class="md:text-3xl text-xl">dentro de tu escuela</b> y recogerla <b class="md:text-3xl text-xl">cuando quieras y puedas</b>.
                         </p>
                     </div>
                 </div>
+                
                 <div class="md:w-3/4 w-5/6 mx-auto flex flex-col ml-100 p-0">
-                    <Separador/>
                     <div class="mx-auto w-full md:w-3/4 md:py-10 mb-10">
-                        <div class="mx-auto w-full md:w-3/4 md:my-5 p-5">
-                            <p class="text-6xl tracking-tight text-center">¿Lo pensaste?, <b class="text-orange-600">búscalo</b></p>
+                        <div class="mx-auto w-full md:w-3/4 md:my-5 p-5 md:text-6xl text-4xl">
+                            <p class="tracking-tight text-center">¿Lo pensaste?, <b class="text-orange-600">búscalo</b></p>
                         </div>
                         <form class="w-full m-auto 2xl:w-1/3">   
                             <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
@@ -62,11 +78,11 @@ const Home = ({products}) => {
                     </div>
                     <Separador/>
                     <div class="mx-auto w-full md:my-10 mb-10">
-                        <div class="mx-auto w-full md:w-3/4 md:my-5 p-5">
-                            <p class="text-6xl tracking-tight text-center">Una sección <b class="text-orange-600">solo para ti</b></p>
+                        <div class="mx-auto w-full md:w-3/4 md:my-5 p-5 md:text-6xl text-4xl">
+                            <p class="tracking-tight text-center">Una sección <b class="text-orange-600">solo para ti</b></p>
                         </div>
-                        <div class="mx-auto md:w-3/4 md:my-5 md:pb-10 pb-5">
-                            <p class="text-2xl leading-loose tracking-tight ">
+                        <div class="mx-auto md:w-3/4 md:my-5 md:pb-10 pb-5 md:text-2xl text-lg text-justify">
+                            <p class="leading-loose tracking-tight">
                                 Usamos métodos que recopilan tus comidas favoritas y calculan distintos alimentos que podrían gustarte, echa un vistazo a esta sección.
                             </p>
                         </div>
@@ -77,7 +93,6 @@ const Home = ({products}) => {
                                 <Image class="h-60 w-full bg-gray-200 border-black" src="" alt="Alimento"/>
                                 <div class="text-center grid grid-cols-1 content-around w-full">
                                     <p class="font-bold text-3xl">{product.nombre}</p>
-
                                     {product.momento=='Bebida' ? (
                                         <div class="flex justify-center">
                                             <p>Platillo: {product.momento}</p>
@@ -106,7 +121,6 @@ const Home = ({products}) => {
                                         <svg onClick={() => addProduct(product)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                         </svg>
-                                        <p class="text-xl">{0}</p>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
                                         </svg>
@@ -120,7 +134,7 @@ const Home = ({products}) => {
                 {/*MAIN*/}
                 <Footer/>
             </div>
-            <Carrito key={n} onCarrito={onCarrito} setOnCarrito={setOnCarrito} setAllProducts={setAllProducts} allProducts={allProducts}/>
+            <Carrito onCarrito={onCarrito} setOnCarrito={setOnCarrito} setAllProducts={setAllProducts} allProducts={allProducts} setTotal={setTotal} total={total}/>
         </section>
     )
 }
