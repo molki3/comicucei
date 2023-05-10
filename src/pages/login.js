@@ -24,12 +24,15 @@ export default function Login() {
     const handleSubmit = async (e) =>{
         e.preventDefault();     //evitar que se vean las credenciales en el url
         const response = await axios.post('/api/auth/login', credentials);
+        console.log(response.data)
         if(response.data=='login succesfully'){
             router.push('/');
         }else{
+            console.log(response.data)
             document.getElementById('mensaje').textContent = response.data;
             document.getElementById('container-mensaje').className = "mt-3 w-full rounded-lg shadow sm:max-w-md xl:p-0 bg-red-700";
         }
+
     }
 
     function routerRegister(){

@@ -3,7 +3,7 @@ import { useState } from "react"
 import Image from "next/image"
 import QR from "../../public/qr-code.png"
 
-const Carrito = ({onCarrito, setOnCarrito, setAllProducts, allProducts, setTotal, total}) =>{
+const Carrito = ({pedirCarrito, setPedirCarrito, onCarrito, setOnCarrito, setAllProducts, allProducts, setTotal, total}) =>{
 
     () => {
         const section = document.getElementById('section');
@@ -13,10 +13,18 @@ const Carrito = ({onCarrito, setOnCarrito, setAllProducts, allProducts, setTotal
             section.className = "bg-white text-black" 
     }
 
+    const deleteProduct = (product) => {
+        const result = allProducts.filter(
+            item => item.idproducto != product.idproducto
+        );
+        setTotal(total-product.subtotal);
+        setAllProducts(result);
+    }
 
-    const showQR = () =>{
-        const qr = document.getElementById('qr');
-        qr.className = "h-full w-full";
+    const vaciarCarrito = () => {
+        setAllProducts([]);
+        setTotal(0);
+        setPedirCarrito(false);
     }
 
     return(
@@ -52,7 +60,7 @@ const Carrito = ({onCarrito, setOnCarrito, setAllProducts, allProducts, setTotal
                                         <p>{product.nombre}</p>
                                         <p>$ {product.precio}</p>
                                         <p>$ {product.subtotal}</p> 
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 cursor-pointer text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg onClick={() => deleteProduct(product)} xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 cursor-pointer text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                     </svg>
                                 </div>
@@ -60,27 +68,45 @@ const Carrito = ({onCarrito, setOnCarrito, setAllProducts, allProducts, setTotal
                             : 
                                 <p class="text-xl my-5">Carrito Vacio</p>
                             }
-                            <div class="w-1/2 md:w-1/5 bg-orange-800 hover:bg-orange-700 mx-auto rounded-lg text-white mt-3 p-1 cursor-pointer">
-                                <p>Vaciar carrito</p>
-                            </div>
+                            {allProducts.length>0 && !pedirCarrito
+                            ? 
+                                <div onClick={vaciarCarrito} class="w-1/2 md:w-1/5 bg-red-800 hover:bg-red-700 mx-auto rounded-lg text-white mt-3 p-1 cursor-pointer">
+                                    <p>Vaciar carrito</p>
+                                </div>
+                            : 
+                                <div></div> 
+                            }
+                            
                         </div>
-                        <div class="grid grid-cols-2">
+                        <div class="grid grid-cols-2 w-4/5 md:w-1/2 mx-auto">
+                            <div>
+                                {pedirCarrito ?
+                                <div class="h-full w-full" id="qr">
+                                    <Image class="pt-0 lg:pt-0 rounded-xl" src={QR} alt="Código QR"></Image>
+                                </div>
+                                :  
+                                <div class="h-full w-full" id="qr"></div>
+                                }
+                            </div>
                             <div class="text-center dark:text-white md:text-2xl text-lg my-auto mt-0 lg:flex justify-around flex-col">
-                                <p>Total: $ {total}</p>
-                                {allProducts.length>0 ?
+                                <p>Total: ${total}</p>
+                                {allProducts.length>0 && !pedirCarrito 
+                                    ?  
                                     <div class="">
-                                        <button onClick={showQR} type="button" class="m-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Pedir</button>
+                                        <button onClick={() => setPedirCarrito(true)} type="button" class="m-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Pedir</button>
                                     </div>
                                     :
                                     <div></div>
                                 } 
                             </div>
-                            <div class="h-full w-full hidden" id="qr">
-                                <Image class={"lg:p-40 p-5   pt-0 lg:pt-0 rounded-lg"} src={QR} alt="Código QR"></Image>
-                            </div>
                         </div>
-                        
-
+                        <div class="mx-auto mt-5">
+                            {pedirCarrito ?
+                                <button onClick={vaciarCarrito} type="button" class="m-5 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">He recogido mi pedido ✔️</button>                            
+                            :
+                                <div></div>
+                            }
+                        </div>
                     </div>
                 </section>
             :
