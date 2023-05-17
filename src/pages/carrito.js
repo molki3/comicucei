@@ -3,8 +3,19 @@ import { useState } from "react"
 import Image from "next/image"
 import QR from "../../public/qr-code.png"
 
-const Carrito = ({pedirCarrito, setPedirCarrito, onCarrito, setOnCarrito, setAllProducts, allProducts, setTotal, total}) =>{
+const Carrito = ({historialProductos, setHistorialProductos, recogerCarrito, setRecogerCarrito, pedirCarrito, setPedirCarrito, onCarrito, setOnCarrito, setAllProducts, allProducts, setTotal, total}) =>{
 
+    const [user, setUser] = useState({
+        codigo: "",
+        nombre: ""
+    })
+    
+    const getProfile = async () =>{
+        //retorna un objeto con codigo y nombre
+        const response = await axios.get('/api/profile');
+        setUser(response.data);
+    }
+    
     () => {
         const section = document.getElementById('section');
         onCarrito ?
@@ -21,10 +32,32 @@ const Carrito = ({pedirCarrito, setPedirCarrito, onCarrito, setOnCarrito, setAll
         setAllProducts(result);
     }
 
+    const enviarCarrito = () => {
+
+        setPedirCarrito(true);
+
+        allProducts.map(item => {
+            const into = historialProductos.find(into => into.idproducto == item.idproducto)
+            into ?
+                into.cantidad = into.cantidad + item.cantidad
+            :
+                setHistorialProductos([...historialProductos,item]);
+            if(into){
+                historialProductos.filter((product) => product.idproducto != item.idproducto);
+            }
+        })
+    }
+
     const vaciarCarrito = () => {
         setAllProducts([]);
         setTotal(0);
+    }
+
+    const recogerPedido = () => {
         setPedirCarrito(false);
+        setOnCarrito(false);
+        setRecogerCarrito(true);
+        //vaciarCarrito();
     }
 
     return(
@@ -93,7 +126,7 @@ const Carrito = ({pedirCarrito, setPedirCarrito, onCarrito, setOnCarrito, setAll
                                 {allProducts.length>0 && !pedirCarrito 
                                     ?  
                                     <div class="">
-                                        <button onClick={() => setPedirCarrito(true)} type="button" class="m-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Pedir</button>
+                                        <button onClick={enviarCarrito} type="button" class="m-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Pedir</button>
                                     </div>
                                     :
                                     <div></div>
@@ -102,7 +135,7 @@ const Carrito = ({pedirCarrito, setPedirCarrito, onCarrito, setOnCarrito, setAll
                         </div>
                         <div class="mx-auto mt-5">
                             {pedirCarrito ?
-                                <button onClick={vaciarCarrito} type="button" class="m-5 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">He recogido mi pedido ✔️</button>                            
+                                <button onClick={recogerPedido} type="button" class="m-5 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">He recogido mi pedido ✔️</button>                            
                             :
                                 <div></div>
                             }

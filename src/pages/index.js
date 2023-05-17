@@ -5,19 +5,23 @@ import axios from "axios"
 import Image from "next/image"
 import { useState } from "react"
 import Carrito from "./carrito"
+import Calificar from "./calificar"
 
 const Home = ({products}) => {
 
     //MOSTRAR O NO CARRITO 
-    const [onCarrito, setOnCarrito] = useState(false)
-
+    const [onCarrito, setOnCarrito] = useState(false);
+    const [recogerCarrito, setRecogerCarrito] = useState(false);
     const [pedirCarrito, setPedirCarrito] = useState(false)
 
+    const [historialProductos, setHistorialProductos] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
-    const [total, setTotal] = useState(0)
-    const [countProducts, setCountProducts] = useState(0)
+    const [total, setTotal] = useState(0);
 
     products = products.rows;
+
+    console.log("HISTORIAL:");
+    console.log(historialProductos);
 
     
 
@@ -37,13 +41,13 @@ const Home = ({products}) => {
             setTotal(total+parseFloat(product.precio));
             product.cantidad=1;
             product.subtotal = parseFloat(product.precio);
-            console.log(product)
+            //console.log(product)
             setAllProducts([...allProducts, product]);  
         }
         
     }
 
-    console.log(allProducts);
+    //console.log(allProducts);
 
     return(
         // <section class="bg-white text-black flex grid md:grid-cols-4 grid-cols-1"> 
@@ -133,7 +137,8 @@ const Home = ({products}) => {
                 {/*MAIN*/}
                 <Footer/>
             </div>
-            <Carrito pedirCarrito={pedirCarrito} setPedirCarrito={setPedirCarrito} onCarrito={onCarrito} setOnCarrito={setOnCarrito} setAllProducts={setAllProducts} allProducts={allProducts} setTotal={setTotal} total={total}/>
+            <Carrito historialProductos={historialProductos} setHistorialProductos={setHistorialProductos} recogerCarrito={recogerCarrito} setRecogerCarrito={setRecogerCarrito} pedirCarrito={pedirCarrito} setPedirCarrito={setPedirCarrito} onCarrito={onCarrito} setOnCarrito={setOnCarrito} setAllProducts={setAllProducts} allProducts={allProducts} setTotal={setTotal} total={total}/>
+            <Calificar recogerCarrito={recogerCarrito} setRecogerCarrito={setRecogerCarrito} allProducts={allProducts} setAllProducts={setAllProducts}/>                               
         </section>
     )
 }
