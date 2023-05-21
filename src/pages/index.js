@@ -6,8 +6,10 @@ import Image from "next/image"
 import { useState } from "react"
 import Carrito from "./carrito"
 import Calificar from "./calificar"
+import { useEffect } from "react"
 
 const Home = ({products}) => {
+    products = products.rows;
 
     //MOSTRAR O NO CARRITO 
     const [onCarrito, setOnCarrito] = useState(false);
@@ -18,21 +20,30 @@ const Home = ({products}) => {
     const [allProducts, setAllProducts] = useState([]);
     const [total, setTotal] = useState(0);
 
-    products = products.rows;
-
-    console.log("HISTORIAL:");
+    const [user, setUser] = useState({
+        codigo: "",
+        nombre: ""
+    });
+    
+    const getProfile = async () =>{
+        //retorna un objeto con codigo y nombre
+        const response = await axios.get('/api/profile');
+        setUser(response.data)
+    };
+    
     console.log(historialProductos);
 
-    
-
-
-    const addProduct = (product) =>{
-
-        if(allProducts.find(item => item.idproducto == product.idproducto)){
+    const addProduct = async (producto) =>{
+        const product = producto;
+        getProfile();
+        const itemm = allProducts.find(item => item.idproducto === product.idproducto)
+        if(itemm){
+            console.log("Encontrado:");
+            console.log(itemm)
             setTotal(total+parseFloat(product.precio));
             const products = allProducts.map(item =>
                 item.idproducto == product.idproducto ?
-                {...item, cantidad: item.cantidad + 1, subtotal: parseFloat(item.subtotal) + parseFloat(item.precio)} 
+                {...item, cantidad: item.cantidad + 1, subtotal: parseFloat(item.subtotal) + parseFloat(item.precio), usuario: user.codigo} 
                 : item
             );
             return setAllProducts([...products]);
@@ -41,13 +52,15 @@ const Home = ({products}) => {
             setTotal(total+parseFloat(product.precio));
             product.cantidad=1;
             product.subtotal = parseFloat(product.precio);
-            //console.log(product)
+            console.log("AGREGO USUARIO:")
+            console.log(user);
+            product.calificacion = 0;
+            product.usuario=user.codigo;
+            console.log("No se encontro, se agrega: ");
+            console.log(product)
             setAllProducts([...allProducts, product]);  
-        }
-        
-    }
-
-    //console.log(allProducts);
+        } 
+    };
 
     return(
         // <section class="bg-white text-black flex grid md:grid-cols-4 grid-cols-1"> 
@@ -138,7 +151,7 @@ const Home = ({products}) => {
                 <Footer/>
             </div>
             <Carrito historialProductos={historialProductos} setHistorialProductos={setHistorialProductos} recogerCarrito={recogerCarrito} setRecogerCarrito={setRecogerCarrito} pedirCarrito={pedirCarrito} setPedirCarrito={setPedirCarrito} onCarrito={onCarrito} setOnCarrito={setOnCarrito} setAllProducts={setAllProducts} allProducts={allProducts} setTotal={setTotal} total={total}/>
-            <Calificar recogerCarrito={recogerCarrito} setRecogerCarrito={setRecogerCarrito} allProducts={allProducts} setAllProducts={setAllProducts}/>                               
+            <Calificar historialProductos={historialProductos} setHistorialProductos={setHistorialProductos} recogerCarrito={recogerCarrito} setRecogerCarrito={setRecogerCarrito} allProducts={allProducts} setAllProducts={setAllProducts}/>                               
         </section>
     )
 }

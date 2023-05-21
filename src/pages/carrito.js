@@ -2,19 +2,9 @@ import Separador from "@sspis-comicucei/components/separador"
 import { useState } from "react"
 import Image from "next/image"
 import QR from "../../public/qr-code.png"
+import axios from "axios"
 
 const Carrito = ({historialProductos, setHistorialProductos, recogerCarrito, setRecogerCarrito, pedirCarrito, setPedirCarrito, onCarrito, setOnCarrito, setAllProducts, allProducts, setTotal, total}) =>{
-
-    const [user, setUser] = useState({
-        codigo: "",
-        nombre: ""
-    })
-    
-    const getProfile = async () =>{
-        //retorna un objeto con codigo y nombre
-        const response = await axios.get('/api/profile');
-        setUser(response.data);
-    }
     
     () => {
         const section = document.getElementById('section');
@@ -22,7 +12,7 @@ const Carrito = ({historialProductos, setHistorialProductos, recogerCarrito, set
             section.className = "bg-white text-black hidden" 
         :
             section.className = "bg-white text-black" 
-    }
+    };
 
     const deleteProduct = (product) => {
         const result = allProducts.filter(
@@ -30,35 +20,19 @@ const Carrito = ({historialProductos, setHistorialProductos, recogerCarrito, set
         );
         setTotal(total-product.subtotal);
         setAllProducts(result);
-    }
-
-    const enviarCarrito = () => {
-
-        setPedirCarrito(true);
-
-        allProducts.map(item => {
-            const into = historialProductos.find(into => into.idproducto == item.idproducto)
-            into ?
-                into.cantidad = into.cantidad + item.cantidad
-            :
-                setHistorialProductos([...historialProductos,item]);
-            if(into){
-                historialProductos.filter((product) => product.idproducto != item.idproducto);
-            }
-        })
-    }
+    };
 
     const vaciarCarrito = () => {
         setAllProducts([]);
         setTotal(0);
-    }
+    };
 
     const recogerPedido = () => {
         setPedirCarrito(false);
         setOnCarrito(false);
         setRecogerCarrito(true);
-        //vaciarCarrito();
-    }
+        setTotal(0);
+    };
 
     return(
         <div>
@@ -77,7 +51,7 @@ const Carrito = ({historialProductos, setHistorialProductos, recogerCarrito, set
                                 </div>
                             </div>
                             <svg xmlns="http://www.w3.org/2000/svg" onClick={() => setOnCarrito(false)} class="h-10 w-10 m-5 cursor-pointer text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </div>
 
@@ -126,7 +100,7 @@ const Carrito = ({historialProductos, setHistorialProductos, recogerCarrito, set
                                 {allProducts.length>0 && !pedirCarrito 
                                     ?  
                                     <div class="">
-                                        <button onClick={enviarCarrito} type="button" class="m-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Pedir</button>
+                                        <button onClick={() => setPedirCarrito(true)} type="button" class="m-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Pedir</button>
                                     </div>
                                     :
                                     <div></div>
