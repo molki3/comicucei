@@ -6,7 +6,7 @@ import Image from "next/image"
 import { useState } from "react"
 import Carrito from "./carrito"
 import Calificar from "./calificar"
-import { useEffect } from "react"
+import CloudinaryImage from "@sspis-comicucei/components/image"
 
 const Home = ({products}) => {
     products = products.rows;
@@ -110,7 +110,8 @@ const Home = ({products}) => {
                     <div class="mx-auto w-full mb-10 grid grid-cols-1 md:grid xl:grid-cols-2 gap-4">
                         {products.map(product => (
                             <div key={product.id} class="grid grid-cols-2 justify-items-center">
-                                <Image class="h-60 w-full bg-gray-200 border-black" src="" alt="Alimento"/>
+                                {/* <Image class="h-60 w-full bg-gray-200 border-black" src={product.url} alt={product.name} width={300} height={300}/> */}
+                                <CloudinaryImage publicId={product.url} />
                                 <div class="text-center grid grid-cols-1 content-around w-full">
                                     <p class="font-bold text-3xl">{product.nombre}</p>
                                     {product.momento=='Bebida' ? (
