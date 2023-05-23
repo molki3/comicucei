@@ -12,6 +12,9 @@ export default function ProductForm(){
         precio: 0,
         calidad:'',
         momento:'',
+        picante:'',
+        saldul:'',
+        calfrio:'',
         origen:''
     })
 
@@ -33,8 +36,7 @@ export default function ProductForm(){
             document.getElementById('mensaje').textContent = 'Agregado';
         }else{
             document.getElementById('container-mensaje').className = "mt-3 w-full rounded-lg shadow sm:max-w-md xl:p-0 bg-red-700";
-            document.getElementById('mensaje').textContent = response.data;
-            
+            document.getElementById('mensaje').textContent = response.data;  
         }
     }
     
@@ -64,12 +66,26 @@ export default function ProductForm(){
                         </div>
                         <div>
                             <label class="block mb-2 text-sm font-medium text-white dark:text-white">Momento</label>
-                            <input onChange={handleChange} type="text" name="momento" id="momento" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Entrada, Principal, Postre o Bebida" required="true"/>
+                            <input onChange={handleChange} type="text" name="momento" id="momento" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="entrada, principal, postre o bebida" required="true"/>
                         </div>
                         <div>
                             <label class="block mb-2 text-sm font-medium text-white dark:text-white">Lugar de origen</label>
                             <input onChange={handleChange} type="text" name="origen" id="origen" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="mx, na, sa, ca, eur, afr, ori, chn, jpn, ita, fra, esp" required="true"/>
                         </div>
+                        {/*nuevo*/}
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-white">¿Es picante?</label>
+                            <input onChange={handleChange} type="text" name="picante" id="picante" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="s/n" required="true"/>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-white">¿Es salado o dulce?</label>
+                            <input onChange={handleChange} type="text" name="saldul" id="saldul" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="s/d" required="true"/>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-white">¿Es frío o caliente?</label>
+                            <input onChange={handleChange} type="text" name="calfrio" id="calfrio" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="f/c" required="true"/>
+                        </div>
+                        {/*nuevo*/}
                         <div>
                             <label class="block mb-2 text-sm font-medium text-white dark:text-white">URL imagen</label>
                             <input onChange={handleChange} type="text" name="url" id="url" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="URL" required="true"/>

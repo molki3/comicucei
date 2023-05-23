@@ -2,19 +2,32 @@ import Footer from "@sspis-comicucei/components/footer"
 import Menu from "@sspis-comicucei/components/menu"
 import Separador from "@sspis-comicucei/components/separador"
 import axios from "axios"
-import Image from "next/image"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Carrito from "./carrito"
 import Calificar from "./calificar"
 import CloudinaryImage from "@sspis-comicucei/components/image"
 
 const Home = ({products}) => {
-    products = products.rows;
-
     //MOSTRAR O NO CARRITO 
     const [onCarrito, setOnCarrito] = useState(false);
     const [recogerCarrito, setRecogerCarrito] = useState(false);
-    const [pedirCarrito, setPedirCarrito] = useState(false)
+    const [pedirCarrito, setPedirCarrito] = useState(false);
+    const [calificarProductos, setCalificarProductos] = useState(false);
+    const [historialPerfiles, setHistorialPerfiles] = useState([]); //historial de perfiles
+    const [miPerfil, setMiPerfil] = useState({
+        usuario:0, bebida:0, entrada:0, principal:0, postre:0, picante:0, salado:0, dulce:0, caliente:0, frio:0, 
+        mx:0,
+        na:0,
+        sa:0,
+        ca:0,
+        eur:0,
+        afr:0,
+        ori:0,
+        chn:0,
+        jpn:0,
+        ita:0,
+        fra:0   
+    }); 
 
     const [historialProductos, setHistorialProductos] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
@@ -24,18 +37,84 @@ const Home = ({products}) => {
         codigo: "",
         nombre: ""
     });
-    
-    const getProfile = async () =>{
-        //retorna un objeto con codigo y nombre
-        const response = await axios.get('/api/profile');
-        setUser(response.data)
+
+    products = products.rows;
+
+    const fetchData = async () => {
+        try {
+            const response = await axios.get("../../public/profiles.json");
+            const historialPerfiles = response.data;
+            console.log('PERFILES:');
+            console.log(response);
+        } catch (error) {
+            console.log('Error al obtener los perfiles:', error);
+        }
     };
+
+    useEffect(() => {
+        // Función para obtener datos del backend
+        const getProfile = async () =>{
+            //retorna un objeto con codigo y nombre
+            const response = await axios.get('/api/profile');
+            setUser(response.data)
+        };
     
+        getProfile(); // Llamar a la función cuando el componente se monta
+    
+        // Opcional: Puedes retornar una función de limpieza en useEffect
+        // si necesitas realizar alguna limpieza al desmontar el componente
+        return () => {
+          // Lógica de limpieza
+        };
+    }, []); // Pasar un arreglo vacío como segundo argumento
+
+    useEffect(() => {
+        if (calificarProductos) {
+            //fetchData();
+            const miHistorial = historialProductos.filter(producto => producto.usuario == user.codigo);
+            
+            const perfilAux = miPerfil;
+
+             //si el perfil no existe:
+            if(perfilAux.usuario==0){
+                perfilAux.usuario = user.codigo;
+                miHistorial.forEach(product =>{
+                    perfilAux[product.momento] += product.calificacion;
+                    perfilAux[product.origen] += product.calificacion;
+                    if(product.picante=='s') perfilAux.picante += product.calificacion
+                    if(product.saldul=='s') perfilAux.salado += product.calificacion
+                    if(product.saldul=='d') perfilAux.dulce += product.calificacion
+                    if(product.calfrio=='c') perfilAux.caliente += product.calificacion
+                    if(product.calfrio=='f') perfilAux.frio += product.calificacion
+                });
+                setMiPerfil(perfilAux);
+                console.log("NUEVO PERFIL")
+                console.log(miPerfil);
+            }
+            else{
+                allProducts.forEach(product =>{
+                    perfilAux[product.momento] += product.calificacion;
+                    perfilAux[product.origen] += product.calificacion;
+                    if(product.picante=='s') perfilAux.picante += product.calificacion
+                    if(product.saldul=='s') perfilAux.salado += product.calificacion
+                    if(product.saldul=='d') perfilAux.dulce += product.calificacion
+                    if(product.calfrio=='c') perfilAux.caliente += product.calificacion
+                    if(product.calfrio=='f') perfilAux.frio += product.calificacion
+                });
+                setMiPerfil(perfilAux);
+                console.log("YA EXISTE PERFIL")
+                console.log(miPerfil);  
+            }
+        }
+        setAllProducts([]);
+        setCalificarProductos(false);
+    }, [calificarProductos]);
+    
+    console.log(calificarProductos);
     console.log(historialProductos);
 
     const addProduct = async (producto) =>{
         const product = producto;
-        getProfile();
         const itemm = allProducts.find(item => item.idproducto === product.idproducto)
         if(itemm){
             console.log("Encontrado:");
@@ -152,7 +231,7 @@ const Home = ({products}) => {
                 <Footer/>
             </div>
             <Carrito historialProductos={historialProductos} setHistorialProductos={setHistorialProductos} recogerCarrito={recogerCarrito} setRecogerCarrito={setRecogerCarrito} pedirCarrito={pedirCarrito} setPedirCarrito={setPedirCarrito} onCarrito={onCarrito} setOnCarrito={setOnCarrito} setAllProducts={setAllProducts} allProducts={allProducts} setTotal={setTotal} total={total}/>
-            <Calificar historialProductos={historialProductos} setHistorialProductos={setHistorialProductos} recogerCarrito={recogerCarrito} setRecogerCarrito={setRecogerCarrito} allProducts={allProducts} setAllProducts={setAllProducts}/>                               
+            <Calificar calificarProductos={calificarProductos} setCalificarProductos={setCalificarProductos} historialProductos={historialProductos} setHistorialProductos={setHistorialProductos} recogerCarrito={recogerCarrito} setRecogerCarrito={setRecogerCarrito} allProducts={allProducts} setAllProducts={setAllProducts}/>                               
         </section>
     )
 }

@@ -1,33 +1,71 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 
-const Calificar = ({historialProductos, setHistorialProductos, recogerCarrito, setRecogerCarrito, allProducts, setAllProducts}) => {
+const Calificar = ({calificarProductos, setCalificarProductos, historialProductos, setHistorialProductos, recogerCarrito, setRecogerCarrito, allProducts, setAllProducts}) => {
     
     const [likes, setLikes] = useState(Array(allProducts.length).fill(false));
     const [notLikes, setNotLikes] = useState(Array(allProducts.length).fill(false));
 
-    const calificarProductos = () => {
-        setHistorialProductos(prevHistorialProductos => {
-          const updatedHistorialProductos = [...prevHistorialProductos];
-          allProducts.forEach(item => {
-            console.log("ACTUAL:");
-            console.log(item)
-            const foundItem = updatedHistorialProductos.find(into => into.idproducto === item.idproducto);
-            console.log("ENCONTRADO:");
-            console.log(foundItem);
-            if (foundItem) {
-              foundItem.cantidad += item.cantidad;
-              foundItem.calificacion += item.calificacion; // Acumular la calificación en el objeto encontrado
-            } else {
-              updatedHistorialProductos.push(item); // No se encontró, agregar el nuevo producto al historial
-            }
-          });
-          return updatedHistorialProductos;
-        });  
+    // useEffect(() => {
+    //     const fetchHistorialProductos = async () => {
+    //       try {
+    //         const response = await fetch('/api/products/history.json'); // Ruta del archivo JSON en tu backend
+    //         const data = await response.json();
+    //         setHistorialProductos(data.historialProductos);
+    //       } catch (error) {
+    //         console.log('Error al obtener el historial de productos:', error);
+    //       }
+    //     };
+    
+    //     fetchHistorialProductos();
+    //   }, []);
+
+    const actualizarHistorial = async () => {
+        await setHistorialProductos(prevHistorialProductos => {
+            const updatedHistorialProductos = [...prevHistorialProductos];
+            allProducts.forEach(item => {
+              //console.log("ACTUAL:");
+              //console.log(item)
+              const foundItem = updatedHistorialProductos.find(into => into.idproducto === item.idproducto);
+              //console.log("ENCONTRADO:");
+              //console.log(foundItem);
+              if (foundItem) {
+                foundItem.cantidad += item.cantidad;
+                foundItem.calificacion += item.calificacion; // Acumular la calificación en el objeto encontrado
+              } else {
+                updatedHistorialProductos.push(item); // No se encontró, agregar el nuevo producto al historial
+              }
+            });
+            return updatedHistorialProductos;
+          });  
+    }
+
+    const calificar = async () => {
+        await actualizarHistorial();
+
         setLikes(Array(allProducts.length).fill(false));
         setNotLikes(Array(allProducts.length).fill(false));
-        setAllProducts([]);
         setRecogerCarrito(false);
+        setCalificarProductos(true);
+
+        // escribir();
+        // console.log("HISTORIAL");
+        // console.log(historialProductos)
     };
+
+    const escribir = async () => {
+        try {
+          await axios.post('/api/products/history', {historialProductos});
+          console.log('Historial de productos enviado al backend y guardado en archivo JSON.');
+        } catch (error) {
+          console.error('Error al enviar el historial de productos al backend:', error);
+        }
+    };
+
+
+
+    //escribir();
+    //leer();
 
     const like = (product, index) => {
         product.calificacion = 1;
@@ -87,7 +125,7 @@ const Calificar = ({historialProductos, setHistorialProductos, recogerCarrito, s
                         ))}
                     </div>
                     <div class="flex">
-                        <button onClick={calificarProductos} type="button" class="mx-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Listo</button>
+                        <button onClick={calificar} type="button" class="mx-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Listo</button>
                     </div>
                 </section>
             : 
