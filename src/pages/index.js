@@ -14,8 +14,52 @@ const Home = ({products}) => {
     const [pedirCarrito, setPedirCarrito] = useState(false);
     const [calificarProductos, setCalificarProductos] = useState(false);
     const [historialPerfiles, setHistorialPerfiles] = useState([]); //historial de perfiles
-    const [miPerfil, setMiPerfil] = useState({
-        usuario:0, bebida:0, entrada:0, principal:0, postre:0, picante:0, salado:0, dulce:0, caliente:0, frio:0, 
+    
+    //PERFILES DE PREFERENCIAS
+    const [misBebidas, setMisBebidas] = useState({
+        usuario:0, picante:0, salado:0, dulce:0, caliente:0, frio:0, 
+        mx:0,
+        na:0,
+        sa:0,
+        ca:0,
+        eur:0,
+        afr:0,
+        ori:0,
+        chn:0,
+        jpn:0,
+        ita:0,
+        fra:0   
+    }); 
+    const [misEntradas, setMisEntradas] = useState({
+        usuario:0,picante:0, salado:0, dulce:0, caliente:0, frio:0, 
+        mx:0,
+        na:0,
+        sa:0,
+        ca:0,
+        eur:0,
+        afr:0,
+        ori:0,
+        chn:0,
+        jpn:0,
+        ita:0,
+        fra:0   
+    }); 
+    const [misPrincipales, setMisPrincipales] = useState({
+        usuario:0, picante:0, salado:0, dulce:0, caliente:0, frio:0, 
+        mx:0,
+        na:0,
+        sa:0,
+        ca:0,
+        eur:0,
+        afr:0,
+        ori:0,
+        chn:0,
+        jpn:0,
+        ita:0,
+        fra:0   
+    }); 
+    const [misPostres, setMisPostres] = useState({
+        usuario:0, picante:0, salado:0, dulce:0, caliente:0, frio:0, 
         mx:0,
         na:0,
         sa:0,
@@ -32,7 +76,10 @@ const Home = ({products}) => {
     const [historialProductos, setHistorialProductos] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
     const [total, setTotal] = useState(0);
-
+    const [bebidas, setBebidas] = useState([])
+    const [entradas, setEntradas] = useState([])
+    const [principales, setPrincipales] = useState([])
+    const [postres, setPostres] = useState([])
     const [user, setUser] = useState({
         codigo: "",
         nombre: ""
@@ -73,43 +120,378 @@ const Home = ({products}) => {
             //fetchData();
             const miHistorial = historialProductos.filter(producto => producto.usuario == user.codigo);
             
-            const perfilAux = miPerfil;
+            const perfilEntradas= misEntradas;
+            const perfilBebidas= misBebidas;
+            const perfilPrincipal= misPrincipales;
+            const perfilPostre= misPostres;
+            
 
-             //si el perfil no existe:
-            if(perfilAux.usuario==0){
-                perfilAux.usuario = user.codigo;
-                miHistorial.forEach(product =>{
-                    perfilAux[product.momento] += product.calificacion;
-                    perfilAux[product.origen] += product.calificacion;
-                    if(product.picante=='s') perfilAux.picante += product.calificacion
-                    if(product.saldul=='s') perfilAux.salado += product.calificacion
-                    if(product.saldul=='d') perfilAux.dulce += product.calificacion
-                    if(product.calfrio=='c') perfilAux.caliente += product.calificacion
-                    if(product.calfrio=='f') perfilAux.frio += product.calificacion
-                });
-                setMiPerfil(perfilAux);
-                console.log("NUEVO PERFIL")
-                console.log(miPerfil);
-            }
-            else{
-                allProducts.forEach(product =>{
-                    perfilAux[product.momento] += product.calificacion;
-                    perfilAux[product.origen] += product.calificacion;
-                    if(product.picante=='s') perfilAux.picante += product.calificacion
-                    if(product.saldul=='s') perfilAux.salado += product.calificacion
-                    if(product.saldul=='d') perfilAux.dulce += product.calificacion
-                    if(product.calfrio=='c') perfilAux.caliente += product.calificacion
-                    if(product.calfrio=='f') perfilAux.frio += product.calificacion
-                });
-                setMiPerfil(perfilAux);
-                console.log("YA EXISTE PERFIL")
-                console.log(miPerfil);  
-            }
+            perfilEntradas.usuario = user.codigo;
+            perfilBebidas.usuario = user.codigo;
+            perfilPrincipal.usuario = user.codigo;
+            perfilPostre.usuario = user.codigo;
+
+            allProducts.forEach(product =>{
+                switch(product.momento){
+                    case "bebida":
+                        perfilBebidas[product.origen] += product.calificacion;
+                        if(product.picante=='s') perfilBebidas.picante += product.calificacion
+                        if(product.saldul=='s') perfilBebidas.salado += product.calificacion
+                        if(product.saldul=='d') perfilBebidas.dulce += product.calificacion
+                        if(product.saldul=='sd') {
+                            perfilBebidas.dulce += product.calificacion;
+                            perfilBebidas.salado += product.calificacion
+                        }
+                        if(product.calfrio=='c') perfilBebidas.caliente += product.calificacion
+                        if(product.calfrio=='f') perfilBebidas.frio += product.calificacion
+                        break;
+                    case "entrada":
+                        perfilEntradas[product.origen] += product.calificacion;
+                        if(product.picante=='s') perfilEntradas.picante += product.calificacion
+                        if(product.saldul=='s') perfilEntradas.salado += product.calificacion
+                        if(product.saldul=='d') perfilEntradas.dulce += product.calificacion
+                        if(product.saldul=='sd') {
+                            perfilEntradas.dulce += product.calificacion;
+                            perfilEntradas.salado += product.calificacion
+                        }
+                        if(product.calfrio=='c') perfilEntradas.caliente += product.calificacion
+                        if(product.calfrio=='f') perfilEntradas.frio += product.calificacion
+                        break;
+                    case "principal":
+                        perfilPrincipal[product.origen] += product.calificacion;
+                        if(product.picante=='s') perfilPrincipal.picante += product.calificacion
+                        if(product.saldul=='s') perfilPrincipal.salado += product.calificacion
+                        if(product.saldul=='d') perfilPrincipal.dulce += product.calificacion
+                        if(product.saldul=='sd') {
+                            perfilPrincipal.dulce += product.calificacion;
+                            perfilPrincipal.salado += product.calificacion
+                        }
+                        if(product.calfrio=='c') perfilPrincipal.caliente += product.calificacion
+                        if(product.calfrio=='f') perfilPrincipal.frio += product.calificacion
+                        break;
+                    case "postre":
+                        perfilPostre[product.origen] += product.calificacion;
+                        if(product.picante=='s') perfilPostre.picante += product.calificacion
+                        if(product.saldul=='s') perfilPostre.salado += product.calificacion
+                        if(product.saldul=='d') perfilPostre.dulce += product.calificacion
+                        if(product.saldul=='sd') {
+                            perfilPostre.dulce += product.calificacion;
+                            perfilPostre.salado += product.calificacion
+                        }
+                        if(product.calfrio=='c') perfilPostre.caliente += product.calificacion
+                        if(product.calfrio=='f') perfilPostre.frio += product.calificacion
+                        break;
+                    default:
+                        break;
+                }
+            });
+            
+            setMisBebidas(perfilBebidas);
+            setMisEntradas(perfilEntradas);
+            setMisPrincipales(perfilPrincipal);
+            setMisPostres(perfilPostre);
+
+            const bebidaOrdenado = Object.entries(perfilBebidas).sort((a, b) => b[1] - a[1]);
+            const entradaOrdenado = Object.entries(perfilEntradas).sort((a, b) => b[1] - a[1]);
+            const principalOrdenado = Object.entries(perfilPrincipal).sort((a, b) => b[1] - a[1]);
+            const postreOrdenado = Object.entries(perfilPostre).sort((a, b) => b[1] - a[1]);
+
+            console.log("BEBIDAS");
+            console.log(bebidaOrdenado);
+            console.log("ENTRADAS");
+            console.log(entradaOrdenado);
+            console.log("PRINCIPAL");
+            console.log(principalOrdenado);
+            console.log("POSTRE");
+            console.log(postreOrdenado);  
+
+            ////const diccionarioOrdenado = Object.fromEntries(arrayOrdenado);
+
+            setBebidas([]);
+            setEntradas([]);
+            setPrincipales([]);
+            setPostres([]);
+
+            const sBebidas = [];
+            const sEntradas = [];
+            const sPrincipales = [];
+            const sPostres = [];
+
+            products.forEach(product =>{
+                const productAux = product;
+                productAux.estadistica = 0;
+                switch(product.momento){
+                    case "bebida":
+                        //console.log("ENTRA BEBIDA", product.nombre);
+                        for(let propiedad = 1; propiedad<4; propiedad++){
+                            switch(bebidaOrdenado[propiedad][0]){
+                                case "caliente":
+                                    if(productAux.calfrio=="c") productAux.estadistica += bebidaOrdenado[propiedad][1];
+                                    break;
+                                case "frio":
+                                    if(productAux.calfrio=="f") productAux.estadistica += bebidaOrdenado[propiedad][1];
+                                    break;
+                                case "dulce":
+                                    if(productAux.saldul=="d" || productAux.saldul=="sd") productAux.estadistica += bebidaOrdenado[propiedad][1];
+                                    break;
+                                case "salado":
+                                    if(productAux.saldul=="s" || productAux.saldul=="sd") productAux.estadistica += bebidaOrdenado[propiedad][1];
+                                    break;
+                                case "picante":
+                                    if(productAux.picante=="s") productAux.estadistica += bebidaOrdenado[propiedad][1];
+                                    break;
+                                case "mx":
+                                    if(productAux.origen == "mx") productAux.estadistica+=bebidaOrdenado[propiedad][1];
+                                    break;
+                                case "na":
+                                    if(productAux.origen == "na") productAux.estadistica+=bebidaOrdenado[propiedad][1];
+                                    break;
+                                case "sa":
+                                    if(productAux.origen == "sa") productAux.estadistica+=bebidaOrdenado[propiedad][1];
+                                    break;
+                                case "ca":
+                                    if(productAux.origen == "ca") productAux.estadistica+=bebidaOrdenado[propiedad][1];
+                                    break;
+                                case "eur":
+                                    if(productAux.origen == "eur") productAux.estadistica+=bebidaOrdenado[propiedad][1];
+                                    break;
+                                case "afr":
+                                    if(productAux.origen == "afr") productAux.estadistica+=bebidaOrdenado[propiedad][1];
+                                    break;
+                                case "ori":
+                                    if(productAux.origen == "ori") productAux.estadistica+=bebidaOrdenado[propiedad][1];
+                                    break;
+                                case "chn":
+                                    if(productAux.origen == "chn") productAux.estadistica+=bebidaOrdenado[propiedad][1];
+                                    break;
+                                case "jpn":
+                                    if(productAux.origen == "mx") productAux.estadistica+=bebidaOrdenado[propiedad][1];
+                                    break;
+                                case "ita":
+                                    if(productAux.origen == "ita") productAux.estadistica+=bebidaOrdenado[propiedad][1];
+                                    break;
+                                case "fra":
+                                    if(productAux.origen == "mx") productAux.estadistica+=bebidaOrdenado[propiedad][1];
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } 
+                        sBebidas.push(productAux);
+                        break;
+                    case "entrada":
+                        //console.log("ENTRA ENTRADA", product.nombre);
+                        for(let propiedad = 1; propiedad<4; propiedad++){
+                            switch(entradaOrdenado[propiedad][0]){
+                                case "caliente":
+                                    if(productAux.calfrio=="c") productAux.estadistica += entradaOrdenado[propiedad][1];
+                                    break;
+                                case "frio":
+                                    if(productAux.calfrio=="f") productAux.estadistica += entradaOrdenado[propiedad][1];
+                                    break;
+                                case "dulce":
+                                    if(productAux.saldul=="d" || productAux.saldul=="sd") productAux.estadistica += entradaOrdenado[propiedad][1];
+                                    break;
+                                case "salado":
+                                    if(productAux.saldul=="s" || productAux.saldul=="sd") productAux.estadistica += entradaOrdenado[propiedad][1];
+                                    break;
+                                case "picante":
+                                    if(productAux.picante=="s") productAux.estadistica += entradaOrdenado[propiedad][1];
+                                    break;
+                                case "mx":
+                                    if(productAux.origen == "mx") productAux.estadistica+=entradaOrdenado[propiedad][1];
+                                    break;
+                                case "na":
+                                    if(productAux.origen == "na") productAux.estadistica+=entradaOrdenado[propiedad][1];
+                                    break;
+                                case "sa":
+                                    if(productAux.origen == "sa") productAux.estadistica+=entradaOrdenado[propiedad][1];
+                                    break;
+                                case "ca":
+                                    if(productAux.origen == "ca") productAux.estadistica+=entradaOrdenado[propiedad][1];
+                                    break;
+                                case "eur":
+                                    if(productAux.origen == "eur") productAux.estadistica+=entradaOrdenado[propiedad][1];
+                                    break;
+                                case "afr":
+                                    if(productAux.origen == "afr") productAux.estadistica+=entradaOrdenado[propiedad][1];
+                                    break;
+                                case "ori":
+                                    if(productAux.origen == "ori") productAux.estadistica+=entradaOrdenado[propiedad][1];
+                                    break;
+                                case "chn":
+                                    if(productAux.origen == "chn") productAux.estadistica+=entradaOrdenado[propiedad][1];
+                                    break;
+                                case "jpn":
+                                    if(productAux.origen == "mx") productAux.estadistica+=entradaOrdenado[propiedad][1];
+                                    break;
+                                case "ita":
+                                    if(productAux.origen == "ita") productAux.estadistica+=entradaOrdenado[propiedad][1];
+                                    break;
+                                case "fra":
+                                    if(productAux.origen == "mx") productAux.estadistica+=entradaOrdenado[propiedad][1];
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } 
+                        sEntradas.push(productAux);
+                        break;
+                    case "principal":
+                        //console.log("ENTRA PRINCIPAL", product.nombre);
+                        for(let propiedad = 1; propiedad<4; propiedad++){
+                            switch(principalOrdenado[propiedad][0]){
+                                case "caliente":
+                                    if(productAux.calfrio=="c") productAux.estadistica += principalOrdenado[propiedad][1];
+                                    break;
+                                case "frio":
+                                    if(productAux.calfrio=="f") productAux.estadistica += principalOrdenado[propiedad][1];
+                                    break;
+                                case "dulce":
+                                    if(productAux.saldul=="d" || productAux.saldul=="sd") productAux.estadistica += principalOrdenado[propiedad][1];
+                                    break;
+                                case "salado":
+                                    if(productAux.saldul=="s" || productAux.saldul=="sd") productAux.estadistica += principalOrdenado[propiedad][1];
+                                    break;
+                                case "picante":
+                                    if(productAux.picante=="s") productAux.estadistica += principalOrdenado[propiedad][1];
+                                    break;
+                                case "mx":
+                                    if(productAux.origen == "mx") productAux.estadistica+=principalOrdenado[propiedad][1];
+                                    break;
+                                case "na":
+                                    if(productAux.origen == "na") productAux.estadistica+=principalOrdenado[propiedad][1];
+                                    break;
+                                case "sa":
+                                    if(productAux.origen == "sa") productAux.estadistica+=principalOrdenado[propiedad][1];
+                                    break;
+                                case "ca":
+                                    if(productAux.origen == "ca") productAux.estadistica+=principalOrdenado[propiedad][1];
+                                    break;
+                                case "eur":
+                                    if(productAux.origen == "eur") productAux.estadistica+=principalOrdenado[propiedad][1];
+                                    break;
+                                case "afr":
+                                    if(productAux.origen == "afr") productAux.estadistica+=principalOrdenado[propiedad][1];
+                                    break;
+                                case "ori":
+                                    if(productAux.origen == "ori") productAux.estadistica+=principalOrdenado[propiedad][1];
+                                    break;
+                                case "chn":
+                                    if(productAux.origen == "chn") productAux.estadistica+=principalOrdenado[propiedad][1];
+                                    break;
+                                case "jpn":
+                                    if(productAux.origen == "jpn") productAux.estadistica+=principalOrdenado[propiedad][1];
+                                    break;
+                                case "ita":
+                                    if(productAux.origen == "ita") productAux.estadistica+=principalOrdenado[propiedad][1];
+                                    break;
+                                case "fra":
+                                    if(productAux.origen == "fra") productAux.estadistica+=principalOrdenado[propiedad][1];
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } 
+                        sPrincipales.push(productAux);
+                        break;
+                    case "postre":
+                        //console.log("ENTRA POSTRE", product.nombre);
+                        for(let propiedad = 1; propiedad<4; propiedad++){
+                            switch(postreOrdenado[propiedad][0]){
+                                case "caliente":
+                                    if(productAux.calfrio=="c") productAux.estadistica += postreOrdenado[propiedad][1];
+                                    break;
+                                case "frio":
+                                    if(productAux.calfrio=="f") productAux.estadistica += postreOrdenado[propiedad][1];
+                                    break;
+                                case "dulce":
+                                    if(productAux.saldul=="d" || productAux.saldul=="sd") productAux.estadistica += postreOrdenado[propiedad][1];
+                                    break;
+                                case "salado":
+                                    if(productAux.saldul=="s" || productAux.saldul=="sd") productAux.estadistica += postreOrdenado[propiedad][1];
+                                    break;
+                                case "picante":
+                                    if(productAux.picante=="s") productAux.estadistica += postreOrdenado[propiedad][1];
+                                    break;
+                                case "mx":
+                                    if(productAux.origen == "mx") productAux.estadistica+=postreOrdenado[propiedad][1];
+                                    break;
+                                case "na":
+                                    if(productAux.origen == "na") productAux.estadistica+=postreOrdenado[propiedad][1];
+                                    break;
+                                case "sa":
+                                    if(productAux.origen == "sa") productAux.estadistica+=postreOrdenado[propiedad][1];
+                                    break;
+                                case "ca":
+                                    if(productAux.origen == "ca") productAux.estadistica+=postreOrdenado[propiedad][1];
+                                    break;
+                                case "eur":
+                                    if(productAux.origen == "eur") productAux.estadistica+=postreOrdenado[propiedad][1];
+                                    break;
+                                case "afr":
+                                    if(productAux.origen == "afr") productAux.estadistica+=postreOrdenado[propiedad][1];
+                                    break;
+                                case "ori":
+                                    if(productAux.origen == "ori") productAux.estadistica+=postreOrdenado[propiedad][1];
+                                    break;
+                                case "chn":
+                                    if(productAux.origen == "chn") productAux.estadistica+=postreOrdenado[propiedad][1];
+                                    break;
+                                case "jpn":
+                                    if(productAux.origen == "mx") productAux.estadistica+=postreOrdenado[propiedad][1];
+                                    break;
+                                case "ita":
+                                    if(productAux.origen == "ita") productAux.estadistica+=postreOrdenado[propiedad][1];
+                                    break;
+                                case "fra":
+                                    if(productAux.origen == "mx") productAux.estadistica+=postreOrdenado[propiedad][1];
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } 
+                        sPostres.push(productAux);
+                        break;
+                    default:
+                        break;
+                }
+            })
+
+            //ORDEN DE LOS PRODUCTOS POR ESTADISTICA DE FORMA DESCENDENTE 
+            sBebidas.sort((a, b) => b.estadistica - a.estadistica);
+            sEntradas.sort((a, b) => b.estadistica - a.estadistica);
+            sPrincipales.sort((a, b) => b.estadistica - a.estadistica);
+            sPostres.sort((a, b) => b.estadistica - a.estadistica);
+
+            //RECORTANTO ARRAY A LOS PRIMROS 6 PRODUCTOS
+            const sBebidas_ = sBebidas.slice(0, 6);
+            const sEntradas_ = sEntradas.slice(0, 6);
+            const sPrincipales_ = sPrincipales.slice(0, 6);
+            const sPostres_ = sPostres.slice(0, 6);
+
+            //ESTABLECIENDO ESTADO FINAL
+            setBebidas(sBebidas_);
+            setEntradas(sEntradas_);
+            setPrincipales(sPrincipales_);
+            setPostres(sPostres_);
+
+            setAllProducts([]);
+            setCalificarProductos(false);
         }
-        setAllProducts([]);
-        setCalificarProductos(false);
+        
     }, [calificarProductos]);
     
+    console.log("LISTO PARA MOSTRAR")
+    console.log("BEBIDAS");
+    console.log(bebidas);
+    console.log("ENTRADAS");
+    console.log(entradas);
+    console.log("PRINCIPAL");
+    console.log(principales);
+    console.log("POSTRE");
+    console.log(postres);  
+
     console.log(calificarProductos);
     console.log(historialProductos);
 
@@ -176,7 +558,7 @@ const Home = ({products}) => {
                         </form>
                     </div>
                     <Separador/>
-                    <div class="mx-auto w-full md:my-10 mb-10">
+                    <div class="mx-auto w-full md:my-5 mb-5">
                         <div class="mx-auto w-full md:w-3/4 md:my-5 p-5 md:text-6xl text-4xl">
                             <p class="tracking-tight text-center">Una sección <b class="text-orange-600">solo para ti</b></p>
                         </div>
@@ -186,9 +568,12 @@ const Home = ({products}) => {
                             </p>
                         </div>
                     </div>
+                    <div class="mx-auto w-full md:my-5 p-5 md:text-5xl text-4xl">
+                        <h2 class="text-orange-600 font-bold">Bebidas</h2>
+                    </div>
                     <div class="mx-auto w-full mb-10 grid grid-cols-1 md:grid xl:grid-cols-2 gap-4">
-                        {products.map(product => (
-                            <div key={product.id} class="grid grid-cols-2 justify-items-center">
+                        {bebidas.map(product => (
+                            <div key={product.id} class="grid grid-cols-2 justify-items-center place-content-center rounded-3xl shadow border">
                                 {/* <Image class="h-60 w-full bg-gray-200 border-black" src={product.url} alt={product.name} width={300} height={300}/> */}
                                 <CloudinaryImage publicId={product.url} />
                                 <div class="text-center grid grid-cols-1 content-around w-full">
@@ -218,7 +603,179 @@ const Home = ({products}) => {
                                     <p class="text-2xl">${product.precio}</p>
 
                                     <div class="flex justify-around">
-                                        <svg onClick={() => addProduct(product)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer">
+                                        <svg onClick={() => addProduct(product)} xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 cursor-pointer border rounded-full bg-orange-500 shadow">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div class="mx-auto w-full md:my-5 p-5 md:text-5xl text-4xl">
+                        <h2 class="text-orange-600 font-bold">Entradas</h2>
+                    </div>
+                    <div class="mx-auto w-full mb-10 grid grid-cols-1 md:grid xl:grid-cols-2 gap-4">
+                        {entradas.map(product => (
+                            <div key={product.id} class="grid grid-cols-2 justify-items-center place-content-center rounded-3xl shadow border">
+                                {/* <Image class="h-60 w-full bg-gray-200 border-black" src={product.url} alt={product.name} width={300} height={300}/> */}
+                                <CloudinaryImage publicId={product.url} />
+                                <div class="text-center grid grid-cols-1 content-around w-full">
+                                    <p class="font-bold text-3xl">{product.nombre}</p>
+                                    {product.momento=='Bebida' ? (
+                                        <div class="flex justify-center">
+                                            <p>Platillo: {product.momento}</p>
+                                        </div>
+                                    ) : null}
+                                    {product.momento=='Postre' ? (
+                                        <div class="flex justify-center">
+                                            <p>Platillo: {product.momento}</p>
+                                        </div>    
+                                    ) : null}
+                                    {product.momento=='Principal' ? (
+                                        <div class="flex justify-center">
+                                            <p>Platillo: {product.momento}</p>
+                                        </div>
+                                    ) : null}
+                                    {product.momento=='Entrada' ? (
+                                        <div class="flex justify-center">
+                                            <p>Platillo: {product.momento}</p>
+                                        </div>
+                                    ) : null}
+
+                                    <h1 class="text-xl">{product.origen}</h1>
+                                    <p class="text-2xl">${product.precio}</p>
+
+                                    <div class="flex justify-around">
+                                        <svg onClick={() => addProduct(product)} xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 cursor-pointer border rounded-full bg-orange-500 shadow">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div class="mx-auto w-full md:my-5 p-5 md:text-5xl text-4xl">
+                        <h2 class="text-orange-600 font-bold">Platillos Principales</h2>
+                    </div>
+                    <div class="mx-auto w-full mb-10 grid grid-cols-1 md:grid xl:grid-cols-2 gap-4">
+                        {principales.map(product => (
+                            <div key={product.id} class="grid grid-cols-2 justify-items-center place-content-center rounded-3xl shadow border">
+                                {/* <Image class="h-60 w-full bg-gray-200 border-black" src={product.url} alt={product.name} width={300} height={300}/> */}
+                                <CloudinaryImage publicId={product.url} />
+                                <div class="text-center grid grid-cols-1 content-around w-full">
+                                    <p class="font-bold text-3xl">{product.nombre}</p>
+                                    {product.momento=='Bebida' ? (
+                                        <div class="flex justify-center">
+                                            <p>Platillo: {product.momento}</p>
+                                        </div>
+                                    ) : null}
+                                    {product.momento=='Postre' ? (
+                                        <div class="flex justify-center">
+                                            <p>Platillo: {product.momento}</p>
+                                        </div>    
+                                    ) : null}
+                                    {product.momento=='Principal' ? (
+                                        <div class="flex justify-center">
+                                            <p>Platillo: {product.momento}</p>
+                                        </div>
+                                    ) : null}
+                                    {product.momento=='Entrada' ? (
+                                        <div class="flex justify-center">
+                                            <p>Platillo: {product.momento}</p>
+                                        </div>
+                                    ) : null}
+
+                                    <h1 class="text-xl">{product.origen}</h1>
+                                    <p class="text-2xl">${product.precio}</p>
+
+                                    <div class="flex justify-around">
+                                        <svg onClick={() => addProduct(product)} xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 cursor-pointer border rounded-full bg-orange-500 shadow">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div class="mx-auto w-full md:my-5 p-5 md:text-5xl text-4xl">
+                        <h2 class="text-orange-600 font-bold">Postres</h2>
+                    </div>
+                    <div class="mx-auto w-full mb-10 grid grid-cols-1 md:grid xl:grid-cols-2 gap-4">
+                        {postres.map(product => (
+                            <div key={product.id} class="grid grid-cols-2 justify-items-center place-content-center rounded-3xl shadow border">
+                                {/* <Image class="h-60 w-full bg-gray-200 border-black" src={product.url} alt={product.name} width={300} height={300}/> */}
+                                <CloudinaryImage publicId={product.url} />
+                                <div class="text-center grid grid-cols-1 content-around w-full">
+                                    <p class="font-bold text-3xl">{product.nombre}</p>
+                                    {product.momento=='Bebida' ? (
+                                        <div class="flex justify-center">
+                                            <p>Platillo: {product.momento}</p>
+                                        </div>
+                                    ) : null}
+                                    {product.momento=='Postre' ? (
+                                        <div class="flex justify-center">
+                                            <p>Platillo: {product.momento}</p>
+                                        </div>    
+                                    ) : null}
+                                    {product.momento=='Principal' ? (
+                                        <div class="flex justify-center">
+                                            <p>Platillo: {product.momento}</p>
+                                        </div>
+                                    ) : null}
+                                    {product.momento=='Entrada' ? (
+                                        <div class="flex justify-center">
+                                            <p>Platillo: {product.momento}</p>
+                                        </div>
+                                    ) : null}
+
+                                    <h1 class="text-xl">{product.origen}</h1>
+                                    <p class="text-2xl">${product.precio}</p>
+
+                                    <div class="flex justify-around">
+                                        <svg onClick={() => addProduct(product)} xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 cursor-pointer border rounded-full bg-orange-500 shadow">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div class="mx-auto w-full md:my-5 p-5 md:text-5xl text-4xl">
+                        <h2 class="text-orange-600 font-bold">Todos los productos</h2>
+                    </div>
+                    <div class="mx-auto w-full mb-10 grid grid-cols-1 md:grid xl:grid-cols-2 gap-4">
+                        {products.map(product => (
+                            <div key={product.id} class="grid grid-cols-2 justify-items-center place-content-center rounded-3xl shadow border">
+                                {/* <Image class="h-60 w-full bg-gray-200 border-black" src={product.url} alt={product.name} width={300} height={300}/> */}
+                                <CloudinaryImage publicId={product.url} />
+                                <div class="text-center grid grid-cols-1 content-around w-full">
+                                    <p class="font-bold text-3xl">{product.nombre}</p>
+                                    {product.momento=='Bebida' ? (
+                                        <div class="flex justify-center">
+                                            <p>Platillo: {product.momento}</p>
+                                        </div>
+                                    ) : null}
+                                    {product.momento=='Postre' ? (
+                                        <div class="flex justify-center">
+                                            <p>Platillo: {product.momento}</p>
+                                        </div>    
+                                    ) : null}
+                                    {product.momento=='Principal' ? (
+                                        <div class="flex justify-center">
+                                            <p>Platillo: {product.momento}</p>
+                                        </div>
+                                    ) : null}
+                                    {product.momento=='Entrada' ? (
+                                        <div class="flex justify-center">
+                                            <p>Platillo: {product.momento}</p>
+                                        </div>
+                                    ) : null}
+
+                                    <h1 class="text-xl">{product.origen}</h1>
+                                    <p class="text-2xl">${product.precio}</p>
+
+                                    <div class="flex justify-around">
+                                        <svg onClick={() => addProduct(product)} xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 cursor-pointer border rounded-full bg-orange-500 shadow">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                         </svg>
                                     </div>

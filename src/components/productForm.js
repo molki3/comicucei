@@ -10,12 +10,12 @@ export default function ProductForm(){
     const [credentials, setCredentials] = useState({    //estados de las credenciales
         nombre:'',
         precio: 0,
-        calidad:'',
         momento:'',
+        origen:'',
         picante:'',
         saldul:'',
         calfrio:'',
-        origen:''
+        url:''
     })
 
     const router = useRouter();
@@ -38,6 +38,16 @@ export default function ProductForm(){
             document.getElementById('container-mensaje').className = "mt-3 w-full rounded-lg shadow sm:max-w-md xl:p-0 bg-red-700";
             document.getElementById('mensaje').textContent = response.data;  
         }
+        setCredentials({    //estados de las credenciales
+            nombre:'',
+            precio: 0,
+            momento:'',
+            origen:'',
+            picante:'',
+            saldul:'',
+            calfrio:'',
+            url:''
+        })
     }
     
     function routerHome(){
@@ -58,37 +68,35 @@ export default function ProductForm(){
                     <form method="POST" class="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
                         <div>
                             <label class="block mb-2 text-sm font-medium text-white dark:text-white">Nombre</label>
-                            <input onChange={handleChange} type="text" name="nombre" id="nombre" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Nombre del producto" required="true"/>
+                            <input onChange={handleChange} value={credentials.nombre} type="text" name="nombre" id="nombre" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Nombre del producto" required="true"/>
                         </div>
                         <div>
                             <label class="block mb-2 text-sm font-medium text-white dark:text-white">Precio</label>
-                            <input onChange={handleChange} type="number" name="precio" id="precio" placeholder="Precio en pesos MXN" class="bg-green border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required="true"/>
+                            <input onChange={handleChange} value={credentials.precio} type="number" name="precio" id="precio" placeholder="Precio en pesos MXN" class="bg-green border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required="true"/>
                         </div>
                         <div>
                             <label class="block mb-2 text-sm font-medium text-white dark:text-white">Momento</label>
-                            <input onChange={handleChange} type="text" name="momento" id="momento" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="entrada, principal, postre o bebida" required="true"/>
+                            <input onChange={handleChange} value={credentials.momento} type="text" name="momento" id="momento" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="entrada, principal, postre o bebida" required="true"/>
                         </div>
                         <div>
                             <label class="block mb-2 text-sm font-medium text-white dark:text-white">Lugar de origen</label>
-                            <input onChange={handleChange} type="text" name="origen" id="origen" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="mx, na, sa, ca, eur, afr, ori, chn, jpn, ita, fra, esp" required="true"/>
+                            <input onChange={handleChange} value={credentials.origen} type="text" name="origen" id="origen" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="mx, na, sa, ca, eur, afr, ori, chn, jpn, ita, fra, esp" required="true"/>
                         </div>
-                        {/*nuevo*/}
                         <div>
                             <label class="block mb-2 text-sm font-medium text-white dark:text-white">¿Es picante?</label>
-                            <input onChange={handleChange} type="text" name="picante" id="picante" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="s/n" required="true"/>
+                            <input onChange={handleChange} value={credentials.picante} type="text" name="picante" id="picante" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="s/n" required="true"/>
                         </div>
                         <div>
                             <label class="block mb-2 text-sm font-medium text-white dark:text-white">¿Es salado o dulce?</label>
-                            <input onChange={handleChange} type="text" name="saldul" id="saldul" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="s/d" required="true"/>
+                            <input onChange={handleChange} value={credentials.saldul} type="text" name="saldul" id="saldul" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="s/d" required="true"/>
                         </div>
                         <div>
                             <label class="block mb-2 text-sm font-medium text-white dark:text-white">¿Es frío o caliente?</label>
-                            <input onChange={handleChange} type="text" name="calfrio" id="calfrio" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="f/c" required="true"/>
+                            <input onChange={handleChange} value={credentials.calfrio} type="text" name="calfrio" id="calfrio" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="f/c" required="true"/>
                         </div>
-                        {/*nuevo*/}
                         <div>
                             <label class="block mb-2 text-sm font-medium text-white dark:text-white">URL imagen</label>
-                            <input onChange={handleChange} type="text" name="url" id="url" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="URL" required="true"/>
+                            <input onChange={handleChange} value={credentials.url} type="text" name="url" id="url" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="URL" required="true"/>
                         </div>
                         <button type="submit" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Guardar</button>
                     </form>
