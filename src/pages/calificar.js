@@ -81,7 +81,7 @@ const Calificar = ({calificarProductos, setCalificarProductos, historialProducto
     }
 
     const notLike = (product, index) => {
-        product.calificacion = 0;
+        product.calificacion = -1;
         console.log(product.nombre , "calificacion: ", product.calificacion);
         const newLikes = [...likes];
         const newNotLikes = [...notLikes];
@@ -97,9 +97,9 @@ const Calificar = ({calificarProductos, setCalificarProductos, historialProducto
         <div>
             {recogerCarrito 
             ?
-                <section id="calificar" class="p-8 rounded-3xl shadow-lg shadow-gray-500/50 z-30 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 fixed bg-white dark:bg-gray-900 text-black h-3/4 bottom-0 lg:w-3/5 w-full">
+                <section id="calificar" class="p-8 lg:rounded-3xl shadow-lg shadow-gray-500/50 z-30 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 fixed bg-white dark:bg-gray-900 text-black lg:h-3/4 bottom-0 lg:w-3/5 h-full w-full">
                     <h1 class="md:text-4xl text-xl text-white text-center font-bold">¿Te ha gustado lo que pediste? ¡Califícalo!</h1>
-                    <div class="mx-5 w-6/7 md:pb-10 p-5 rounded-3xl text-center align-middle dark:text-white">
+                    <div class="w-full md:pb-10 lg:p-5 text-center align-middle dark:text-white">
                         <div class="flex flex-row items-center py-3 place-content-evenly shadow-md rounded-full">
                             <p>Cantidad</p>
                             <p>Nombre</p>
@@ -108,7 +108,7 @@ const Calificar = ({calificarProductos, setCalificarProductos, historialProducto
                             <p>¿Te gustó?</p>
                         </div>
                         {allProducts.map((product, index) => (
-                            <div key={product.idproducto} class="flex flex-row items-center mt-5 my-1 py-3 place-content-around shadow-md dark:bg-gray-800 rounded-full">
+                            <div key={product.idproducto} class="flex flex-row items-center my-5 my-1 py-3 place-content-around shadow-md dark:bg-gray-800 rounded-xl lg:rounded-full">
                                 <p>{product.cantidad}</p>
                                 <p>{product.nombre}</p>
                                 <p>$ {product.precio}</p>

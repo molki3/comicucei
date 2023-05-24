@@ -4,7 +4,7 @@ import Image from "next/image"
 import QR from "../../public/qr-code.png"
 import axios from "axios"
 
-const Carrito = ({historialProductos, setHistorialProductos, recogerCarrito, setRecogerCarrito, pedirCarrito, setPedirCarrito, onCarrito, setOnCarrito, setAllProducts, allProducts, setTotal, total}) =>{
+const Carrito = ({setRecogerCarrito, pedirCarrito, setPedirCarrito, onCarrito, setOnCarrito, setAllProducts, allProducts, setTotal, total}) =>{
     
     () => {
         const section = document.getElementById('section');
@@ -37,7 +37,7 @@ const Carrito = ({historialProductos, setHistorialProductos, recogerCarrito, set
     return(
         <div>
             {onCarrito ?
-                <section id="section" class="z-20 fixed bg-white dark:bg-gray-900 text-black h-screen top-0 bottom-0 lg:w-3/5 w-full">
+                <section id="section" class="z-20 fixed bg-white dark:bg-gray-900 text-black h-full top-0 bottom-0 lg:w-3/5 w-full">
                     <div class="mx-auto p-0 flex flex-col justify-center">
                         <div class="flex items-center">
                             <div class="p-5">
@@ -85,17 +85,17 @@ const Carrito = ({historialProductos, setHistorialProductos, recogerCarrito, set
                             }
                             
                         </div>
-                        <div class="grid grid-cols-2 w-4/5 md:w-1/2 mx-auto">
+                        <div class="grid grid-cols-2 w-4/5 mx-auto">
                             <div>
                                 {pedirCarrito ?
                                 <div class="h-full w-full" id="qr">
-                                    <Image class="pt-0 lg:pt-0 rounded-xl" src={QR} alt="Código QR"></Image>
+                                    <Image class="pt-0 lg:pt-0 rounded-xl lg:p-20" src={QR} alt="Código QR"></Image>
                                 </div>
                                 :  
                                 <div class="h-full w-full" id="qr"></div>
                                 }
                             </div>
-                            <div class="text-center dark:text-white md:text-2xl text-lg my-auto mt-0 lg:flex justify-around flex-col">
+                            <div class="text-center dark:text-white md:text-2xl text-lg mt-0 lg:flex justify-start flex-col">
                                 <p>Total: ${total}</p>
                                 {allProducts.length>0 && !pedirCarrito 
                                     ?  
@@ -105,14 +105,15 @@ const Carrito = ({historialProductos, setHistorialProductos, recogerCarrito, set
                                     :
                                     <div></div>
                                 } 
+                                {pedirCarrito ?
+                                <button onClick={recogerPedido} type="button" class="m-5 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">He recogido mi pedido ✔️</button>                            
+                                :
+                                    <div></div>
+                                }
                             </div>
                         </div>
                         <div class="mx-auto mt-5">
-                            {pedirCarrito ?
-                                <button onClick={recogerPedido} type="button" class="m-5 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">He recogido mi pedido ✔️</button>                            
-                            :
-                                <div></div>
-                            }
+                            
                         </div>
                     </div>
                 </section>

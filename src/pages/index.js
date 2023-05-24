@@ -6,8 +6,13 @@ import { useEffect, useState } from "react"
 import Carrito from "./carrito"
 import Calificar from "./calificar"
 import CloudinaryImage from "@sspis-comicucei/components/image"
+import { useRouter } from "next/router"
+import SearchResults from "./search"
 
 const Home = ({products}) => {
+    const router = useRouter();
+    const [searchTerm, setSearchTerm] = useState('');
+    const [busqueda, setBusqueda] = useState(false)
     //MOSTRAR O NO CARRITO 
     const [onCarrito, setOnCarrito] = useState(false);
     const [recogerCarrito, setRecogerCarrito] = useState(false);
@@ -482,18 +487,24 @@ const Home = ({products}) => {
         
     }, [calificarProductos]);
     
-    console.log("LISTO PARA MOSTRAR")
-    console.log("BEBIDAS");
-    console.log(bebidas);
-    console.log("ENTRADAS");
-    console.log(entradas);
-    console.log("PRINCIPAL");
-    console.log(principales);
-    console.log("POSTRE");
-    console.log(postres);  
+    // console.log("LISTO PARA MOSTRAR")
+    // console.log("BEBIDAS");
+    // console.log(bebidas);
+    // console.log("ENTRADAS");
+    // console.log(entradas);
+    // console.log("PRINCIPAL");
+    // console.log(principales);
+    // console.log("POSTRE");
+    // console.log(postres);  
 
     console.log(calificarProductos);
     console.log(historialProductos);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setBusqueda(true);
+        //router.push(`/search?term=${encodeURIComponent(searchTerm)}`);
+      };
 
     const addProduct = async (producto) =>{
         const product = producto;
@@ -540,254 +551,260 @@ const Home = ({products}) => {
                         </p>
                     </div>
                 </div>
+
+                {
+                    busqueda ?
+                        <SearchResults setBusqueda={setBusqueda} term={searchTerm} allProducts={allProducts} setAllProducts={setAllProducts} total={total} setTotal={setTotal} user={user}/>
+                    :
+                    <div class="md:w-3/4 w-5/6 mx-auto flex flex-col ml-100 p-0">
+                        <div class="mx-auto w-full md:w-3/4 md:py-10 mb-10">
+                            <div class="mx-auto w-full md:w-3/4 md:my-5 p-5 md:text-6xl text-4xl">
+                                <p class="tracking-tight text-center">¿Lo pensaste?, <b class="text-orange-600">búscalo</b></p>
+                            </div>
+                            <form onSubmit={handleSubmit} class="w-full m-auto 2xl:w-1/3">   
+                                <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                    </div>
+                                    <input onChange={(e) => setSearchTerm(e.target.value)} type="search" id="default-search" class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Hoy quiero comer..." required/>
+                                    <button type="submit" class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Buscar</button>
+                                </div>
+                            </form>
+                        </div>
+                        <Separador/>
+                        <div class="mx-auto w-full md:my-5 mb-5">
+                            <div class="mx-auto w-full md:w-3/4 md:my-5 p-5 md:text-6xl text-4xl">
+                                <p class="tracking-tight text-center">Una sección <b class="text-orange-600">solo para ti</b></p>
+                            </div>
+                            <div class="mx-auto md:w-3/4 md:my-5 md:pb-10 pb-5 md:text-2xl text-lg text-justify">
+                                <p class="leading-loose tracking-tight">
+                                    Usamos métodos que recopilan tus comidas favoritas y calculan distintos alimentos que podrían gustarte, echa un vistazo a esta sección.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mx-auto w-full md:my-5 p-5 md:text-6xl text-4xl">
+                            <h2 class="text-orange-600 font-bold">Bebidas</h2>
+                        </div>
+                        <div class="mx-auto w-full mb-10 grid grid-cols-1 md:grid xl:grid-cols-2 gap-4">
+                            {bebidas.map(product => (
+                                <div key={product.id} class="grid grid-cols-2 justify-items-center place-content-center rounded-3xl shadow border">
+                                    {/* <Image class="h-60 w-full bg-gray-200 border-black" src={product.url} alt={product.name} width={300} height={300}/> */}
+                                    <CloudinaryImage publicId={product.url} />
+                                    <div class="text-center grid grid-cols-1 content-around w-full">
+                                        <p class="font-bold text-3xl">{product.nombre}</p>
+                                        {product.momento=='Bebida' ? (
+                                            <div class="flex justify-center">
+                                                <p>Platillo: {product.momento}</p>
+                                            </div>
+                                        ) : null}
+                                        {product.momento=='Postre' ? (
+                                            <div class="flex justify-center">
+                                                <p>Platillo: {product.momento}</p>
+                                            </div>    
+                                        ) : null}
+                                        {product.momento=='Principal' ? (
+                                            <div class="flex justify-center">
+                                                <p>Platillo: {product.momento}</p>
+                                            </div>
+                                        ) : null}
+                                        {product.momento=='Entrada' ? (
+                                            <div class="flex justify-center">
+                                                <p>Platillo: {product.momento}</p>
+                                            </div>
+                                        ) : null}
+
+                                        <h1 class="text-xl">{product.origen}</h1>
+                                        <p class="text-2xl">${product.precio}</p>
+
+                                        <div class="flex justify-around">
+                                            <svg onClick={() => addProduct(product)} xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 cursor-pointer border rounded-full bg-orange-500 shadow">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <div class="mx-auto w-full md:my-5 p-5 md:text-6xl text-4xl">
+                            <h2 class="text-orange-600 font-bold">Entradas</h2>
+                        </div>
+                        <div class="mx-auto w-full mb-10 grid grid-cols-1 md:grid xl:grid-cols-2 gap-4">
+                            {entradas.map(product => (
+                                <div key={product.id} class="grid grid-cols-2 justify-items-center place-content-center rounded-3xl shadow border">
+                                    {/* <Image class="h-60 w-full bg-gray-200 border-black" src={product.url} alt={product.name} width={300} height={300}/> */}
+                                    <CloudinaryImage publicId={product.url} />
+                                    <div class="text-center grid grid-cols-1 content-around w-full">
+                                        <p class="font-bold text-3xl">{product.nombre}</p>
+                                        {product.momento=='Bebida' ? (
+                                            <div class="flex justify-center">
+                                                <p>Platillo: {product.momento}</p>
+                                            </div>
+                                        ) : null}
+                                        {product.momento=='Postre' ? (
+                                            <div class="flex justify-center">
+                                                <p>Platillo: {product.momento}</p>
+                                            </div>    
+                                        ) : null}
+                                        {product.momento=='Principal' ? (
+                                            <div class="flex justify-center">
+                                                <p>Platillo: {product.momento}</p>
+                                            </div>
+                                        ) : null}
+                                        {product.momento=='Entrada' ? (
+                                            <div class="flex justify-center">
+                                                <p>Platillo: {product.momento}</p>
+                                            </div>
+                                        ) : null}
+
+                                        <h1 class="text-xl">{product.origen}</h1>
+                                        <p class="text-2xl">${product.precio}</p>
+
+                                        <div class="flex justify-around">
+                                            <svg onClick={() => addProduct(product)} xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 cursor-pointer border rounded-full bg-orange-500 shadow">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <div class="mx-auto w-full md:my-5 p-5 md:text-6xl text-4xl">
+                            <h2 class="text-orange-600 font-bold">Platillos Principales</h2>
+                        </div>
+                        <div class="mx-auto w-full mb-10 grid grid-cols-1 md:grid xl:grid-cols-2 gap-4">
+                            {principales.map(product => (
+                                <div key={product.id} class="grid grid-cols-2 justify-items-center place-content-center rounded-3xl shadow border">
+                                    {/* <Image class="h-60 w-full bg-gray-200 border-black" src={product.url} alt={product.name} width={300} height={300}/> */}
+                                    <CloudinaryImage publicId={product.url} />
+                                    <div class="text-center grid grid-cols-1 content-around w-full">
+                                        <p class="font-bold text-3xl">{product.nombre}</p>
+                                        {product.momento=='Bebida' ? (
+                                            <div class="flex justify-center">
+                                                <p>Platillo: {product.momento}</p>
+                                            </div>
+                                        ) : null}
+                                        {product.momento=='Postre' ? (
+                                            <div class="flex justify-center">
+                                                <p>Platillo: {product.momento}</p>
+                                            </div>    
+                                        ) : null}
+                                        {product.momento=='Principal' ? (
+                                            <div class="flex justify-center">
+                                                <p>Platillo: {product.momento}</p>
+                                            </div>
+                                        ) : null}
+                                        {product.momento=='Entrada' ? (
+                                            <div class="flex justify-center">
+                                                <p>Platillo: {product.momento}</p>
+                                            </div>
+                                        ) : null}
+
+                                        <h1 class="text-xl">{product.origen}</h1>
+                                        <p class="text-2xl">${product.precio}</p>
+
+                                        <div class="flex justify-around">
+                                            <svg onClick={() => addProduct(product)} xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 cursor-pointer border rounded-full bg-orange-500 shadow">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <div class="mx-auto w-full md:my-5 p-5 md:text-6xl text-4xl">
+                            <h2 class="text-orange-600 font-bold">Postres o Botanas</h2>
+                        </div>
+                        <div class="mx-auto w-full mb-10 grid grid-cols-1 md:grid xl:grid-cols-2 gap-4">
+                            {postres.map(product => (
+                                <div key={product.id} class="grid grid-cols-2 justify-items-center place-content-center rounded-3xl shadow border">
+                                    {/* <Image class="h-60 w-full bg-gray-200 border-black" src={product.url} alt={product.name} width={300} height={300}/> */}
+                                    <CloudinaryImage publicId={product.url} />
+                                    <div class="text-center grid grid-cols-1 content-around w-full">
+                                        <p class="font-bold text-3xl">{product.nombre}</p>
+                                        {product.momento=='Bebida' ? (
+                                            <div class="flex justify-center">
+                                                <p>Platillo: {product.momento}</p>
+                                            </div>
+                                        ) : null}
+                                        {product.momento=='Postre' ? (
+                                            <div class="flex justify-center">
+                                                <p>Platillo: {product.momento}</p>
+                                            </div>    
+                                        ) : null}
+                                        {product.momento=='Principal' ? (
+                                            <div class="flex justify-center">
+                                                <p>Platillo: {product.momento}</p>
+                                            </div>
+                                        ) : null}
+                                        {product.momento=='Entrada' ? (
+                                            <div class="flex justify-center">
+                                                <p>Platillo: {product.momento}</p>
+                                            </div>
+                                        ) : null}
+
+                                        <h1 class="text-xl">{product.origen}</h1>
+                                        <p class="text-2xl">${product.precio}</p>
+
+                                        <div class="flex justify-around">
+                                            <svg onClick={() => addProduct(product)} xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 cursor-pointer border rounded-full bg-orange-500 shadow">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <div class="mx-auto w-full md:my-5 p-5 md:text-6xl text-4xl">
+                            <h2 class="text-orange-600 font-bold">Todos los productos</h2>
+                        </div>
+                        <div class="mx-auto w-full mb-10 grid grid-cols-1 md:grid xl:grid-cols-2 gap-4">
+                            {products.map(product => (
+                                <div key={product.id} class="grid grid-cols-2 justify-items-center place-content-center rounded-3xl shadow border">
+                                    {/* <Image class="h-60 w-full bg-gray-200 border-black" src={product.url} alt={product.name} width={300} height={300}/> */}
+                                    <CloudinaryImage publicId={product.url} />
+                                    <div class="text-center grid grid-cols-1 content-around w-full">
+                                        <p class="font-bold text-3xl">{product.nombre}</p>
+                                        {product.momento=='Bebida' ? (
+                                            <div class="flex justify-center">
+                                                <p>Platillo: {product.momento}</p>
+                                            </div>
+                                        ) : null}
+                                        {product.momento=='Postre' ? (
+                                            <div class="flex justify-center">
+                                                <p>Platillo: {product.momento}</p>
+                                            </div>    
+                                        ) : null}
+                                        {product.momento=='Principal' ? (
+                                            <div class="flex justify-center">
+                                                <p>Platillo: {product.momento}</p>
+                                            </div>
+                                        ) : null}
+                                        {product.momento=='Entrada' ? (
+                                            <div class="flex justify-center">
+                                                <p>Platillo: {product.momento}</p>
+                                            </div>
+                                        ) : null}
+
+                                        <h1 class="text-xl">{product.origen}</h1>
+                                        <p class="text-2xl">${product.precio}</p>
+
+                                        <div class="flex justify-around">
+                                            <svg onClick={() => addProduct(product)} xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 cursor-pointer border rounded-full bg-orange-500 shadow">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                }
                 
-                <div class="md:w-3/4 w-5/6 mx-auto flex flex-col ml-100 p-0">
-                    <div class="mx-auto w-full md:w-3/4 md:py-10 mb-10">
-                        <div class="mx-auto w-full md:w-3/4 md:my-5 p-5 md:text-6xl text-4xl">
-                            <p class="tracking-tight text-center">¿Lo pensaste?, <b class="text-orange-600">búscalo</b></p>
-                        </div>
-                        <form class="w-full m-auto 2xl:w-1/3">   
-                            <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                                </div>
-                                <input type="search" id="default-search" class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Hoy quiero comer..." required/>
-                                <button type="submit" class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Buscar</button>
-                            </div>
-                        </form>
-                    </div>
-                    <Separador/>
-                    <div class="mx-auto w-full md:my-5 mb-5">
-                        <div class="mx-auto w-full md:w-3/4 md:my-5 p-5 md:text-6xl text-4xl">
-                            <p class="tracking-tight text-center">Una sección <b class="text-orange-600">solo para ti</b></p>
-                        </div>
-                        <div class="mx-auto md:w-3/4 md:my-5 md:pb-10 pb-5 md:text-2xl text-lg text-justify">
-                            <p class="leading-loose tracking-tight">
-                                Usamos métodos que recopilan tus comidas favoritas y calculan distintos alimentos que podrían gustarte, echa un vistazo a esta sección.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="mx-auto w-full md:my-5 p-5 md:text-5xl text-4xl">
-                        <h2 class="text-orange-600 font-bold">Bebidas</h2>
-                    </div>
-                    <div class="mx-auto w-full mb-10 grid grid-cols-1 md:grid xl:grid-cols-2 gap-4">
-                        {bebidas.map(product => (
-                            <div key={product.id} class="grid grid-cols-2 justify-items-center place-content-center rounded-3xl shadow border">
-                                {/* <Image class="h-60 w-full bg-gray-200 border-black" src={product.url} alt={product.name} width={300} height={300}/> */}
-                                <CloudinaryImage publicId={product.url} />
-                                <div class="text-center grid grid-cols-1 content-around w-full">
-                                    <p class="font-bold text-3xl">{product.nombre}</p>
-                                    {product.momento=='Bebida' ? (
-                                        <div class="flex justify-center">
-                                            <p>Platillo: {product.momento}</p>
-                                        </div>
-                                    ) : null}
-                                    {product.momento=='Postre' ? (
-                                        <div class="flex justify-center">
-                                            <p>Platillo: {product.momento}</p>
-                                        </div>    
-                                    ) : null}
-                                    {product.momento=='Principal' ? (
-                                        <div class="flex justify-center">
-                                            <p>Platillo: {product.momento}</p>
-                                        </div>
-                                    ) : null}
-                                    {product.momento=='Entrada' ? (
-                                        <div class="flex justify-center">
-                                            <p>Platillo: {product.momento}</p>
-                                        </div>
-                                    ) : null}
-
-                                    <h1 class="text-xl">{product.origen}</h1>
-                                    <p class="text-2xl">${product.precio}</p>
-
-                                    <div class="flex justify-around">
-                                        <svg onClick={() => addProduct(product)} xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 cursor-pointer border rounded-full bg-orange-500 shadow">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                    <div class="mx-auto w-full md:my-5 p-5 md:text-5xl text-4xl">
-                        <h2 class="text-orange-600 font-bold">Entradas</h2>
-                    </div>
-                    <div class="mx-auto w-full mb-10 grid grid-cols-1 md:grid xl:grid-cols-2 gap-4">
-                        {entradas.map(product => (
-                            <div key={product.id} class="grid grid-cols-2 justify-items-center place-content-center rounded-3xl shadow border">
-                                {/* <Image class="h-60 w-full bg-gray-200 border-black" src={product.url} alt={product.name} width={300} height={300}/> */}
-                                <CloudinaryImage publicId={product.url} />
-                                <div class="text-center grid grid-cols-1 content-around w-full">
-                                    <p class="font-bold text-3xl">{product.nombre}</p>
-                                    {product.momento=='Bebida' ? (
-                                        <div class="flex justify-center">
-                                            <p>Platillo: {product.momento}</p>
-                                        </div>
-                                    ) : null}
-                                    {product.momento=='Postre' ? (
-                                        <div class="flex justify-center">
-                                            <p>Platillo: {product.momento}</p>
-                                        </div>    
-                                    ) : null}
-                                    {product.momento=='Principal' ? (
-                                        <div class="flex justify-center">
-                                            <p>Platillo: {product.momento}</p>
-                                        </div>
-                                    ) : null}
-                                    {product.momento=='Entrada' ? (
-                                        <div class="flex justify-center">
-                                            <p>Platillo: {product.momento}</p>
-                                        </div>
-                                    ) : null}
-
-                                    <h1 class="text-xl">{product.origen}</h1>
-                                    <p class="text-2xl">${product.precio}</p>
-
-                                    <div class="flex justify-around">
-                                        <svg onClick={() => addProduct(product)} xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 cursor-pointer border rounded-full bg-orange-500 shadow">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                    <div class="mx-auto w-full md:my-5 p-5 md:text-5xl text-4xl">
-                        <h2 class="text-orange-600 font-bold">Platillos Principales</h2>
-                    </div>
-                    <div class="mx-auto w-full mb-10 grid grid-cols-1 md:grid xl:grid-cols-2 gap-4">
-                        {principales.map(product => (
-                            <div key={product.id} class="grid grid-cols-2 justify-items-center place-content-center rounded-3xl shadow border">
-                                {/* <Image class="h-60 w-full bg-gray-200 border-black" src={product.url} alt={product.name} width={300} height={300}/> */}
-                                <CloudinaryImage publicId={product.url} />
-                                <div class="text-center grid grid-cols-1 content-around w-full">
-                                    <p class="font-bold text-3xl">{product.nombre}</p>
-                                    {product.momento=='Bebida' ? (
-                                        <div class="flex justify-center">
-                                            <p>Platillo: {product.momento}</p>
-                                        </div>
-                                    ) : null}
-                                    {product.momento=='Postre' ? (
-                                        <div class="flex justify-center">
-                                            <p>Platillo: {product.momento}</p>
-                                        </div>    
-                                    ) : null}
-                                    {product.momento=='Principal' ? (
-                                        <div class="flex justify-center">
-                                            <p>Platillo: {product.momento}</p>
-                                        </div>
-                                    ) : null}
-                                    {product.momento=='Entrada' ? (
-                                        <div class="flex justify-center">
-                                            <p>Platillo: {product.momento}</p>
-                                        </div>
-                                    ) : null}
-
-                                    <h1 class="text-xl">{product.origen}</h1>
-                                    <p class="text-2xl">${product.precio}</p>
-
-                                    <div class="flex justify-around">
-                                        <svg onClick={() => addProduct(product)} xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 cursor-pointer border rounded-full bg-orange-500 shadow">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                    <div class="mx-auto w-full md:my-5 p-5 md:text-5xl text-4xl">
-                        <h2 class="text-orange-600 font-bold">Postres</h2>
-                    </div>
-                    <div class="mx-auto w-full mb-10 grid grid-cols-1 md:grid xl:grid-cols-2 gap-4">
-                        {postres.map(product => (
-                            <div key={product.id} class="grid grid-cols-2 justify-items-center place-content-center rounded-3xl shadow border">
-                                {/* <Image class="h-60 w-full bg-gray-200 border-black" src={product.url} alt={product.name} width={300} height={300}/> */}
-                                <CloudinaryImage publicId={product.url} />
-                                <div class="text-center grid grid-cols-1 content-around w-full">
-                                    <p class="font-bold text-3xl">{product.nombre}</p>
-                                    {product.momento=='Bebida' ? (
-                                        <div class="flex justify-center">
-                                            <p>Platillo: {product.momento}</p>
-                                        </div>
-                                    ) : null}
-                                    {product.momento=='Postre' ? (
-                                        <div class="flex justify-center">
-                                            <p>Platillo: {product.momento}</p>
-                                        </div>    
-                                    ) : null}
-                                    {product.momento=='Principal' ? (
-                                        <div class="flex justify-center">
-                                            <p>Platillo: {product.momento}</p>
-                                        </div>
-                                    ) : null}
-                                    {product.momento=='Entrada' ? (
-                                        <div class="flex justify-center">
-                                            <p>Platillo: {product.momento}</p>
-                                        </div>
-                                    ) : null}
-
-                                    <h1 class="text-xl">{product.origen}</h1>
-                                    <p class="text-2xl">${product.precio}</p>
-
-                                    <div class="flex justify-around">
-                                        <svg onClick={() => addProduct(product)} xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 cursor-pointer border rounded-full bg-orange-500 shadow">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                    <div class="mx-auto w-full md:my-5 p-5 md:text-5xl text-4xl">
-                        <h2 class="text-orange-600 font-bold">Todos los productos</h2>
-                    </div>
-                    <div class="mx-auto w-full mb-10 grid grid-cols-1 md:grid xl:grid-cols-2 gap-4">
-                        {products.map(product => (
-                            <div key={product.id} class="grid grid-cols-2 justify-items-center place-content-center rounded-3xl shadow border">
-                                {/* <Image class="h-60 w-full bg-gray-200 border-black" src={product.url} alt={product.name} width={300} height={300}/> */}
-                                <CloudinaryImage publicId={product.url} />
-                                <div class="text-center grid grid-cols-1 content-around w-full">
-                                    <p class="font-bold text-3xl">{product.nombre}</p>
-                                    {product.momento=='Bebida' ? (
-                                        <div class="flex justify-center">
-                                            <p>Platillo: {product.momento}</p>
-                                        </div>
-                                    ) : null}
-                                    {product.momento=='Postre' ? (
-                                        <div class="flex justify-center">
-                                            <p>Platillo: {product.momento}</p>
-                                        </div>    
-                                    ) : null}
-                                    {product.momento=='Principal' ? (
-                                        <div class="flex justify-center">
-                                            <p>Platillo: {product.momento}</p>
-                                        </div>
-                                    ) : null}
-                                    {product.momento=='Entrada' ? (
-                                        <div class="flex justify-center">
-                                            <p>Platillo: {product.momento}</p>
-                                        </div>
-                                    ) : null}
-
-                                    <h1 class="text-xl">{product.origen}</h1>
-                                    <p class="text-2xl">${product.precio}</p>
-
-                                    <div class="flex justify-around">
-                                        <svg onClick={() => addProduct(product)} xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 cursor-pointer border rounded-full bg-orange-500 shadow">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
                 {/*MAIN*/}
                 <Footer/>
             </div>
-            <Carrito historialProductos={historialProductos} setHistorialProductos={setHistorialProductos} recogerCarrito={recogerCarrito} setRecogerCarrito={setRecogerCarrito} pedirCarrito={pedirCarrito} setPedirCarrito={setPedirCarrito} onCarrito={onCarrito} setOnCarrito={setOnCarrito} setAllProducts={setAllProducts} allProducts={allProducts} setTotal={setTotal} total={total}/>
+            <Carrito setRecogerCarrito={setRecogerCarrito} pedirCarrito={pedirCarrito} setPedirCarrito={setPedirCarrito} onCarrito={onCarrito} setOnCarrito={setOnCarrito} setAllProducts={setAllProducts} allProducts={allProducts} setTotal={setTotal} total={total}/>
             <Calificar calificarProductos={calificarProductos} setCalificarProductos={setCalificarProductos} historialProductos={historialProductos} setHistorialProductos={setHistorialProductos} recogerCarrito={recogerCarrito} setRecogerCarrito={setRecogerCarrito} allProducts={allProducts} setAllProducts={setAllProducts}/>                               
         </section>
     )
