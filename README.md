@@ -1,4 +1,23 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ComiCucei
+Una app de comida para instituciones educativas, diseñada con el fin de evitar grandes acumulaciones de personas en locales de comida y evitar deficiencia en tiempos de espera.
+
+## Diseño
+### Login
+![image](https://github.com/molki3/comicucei/assets/54428156/1b91fa2c-5f1c-4db4-9187-bed92e79245e)
+### Landing page
+![image](https://github.com/molki3/comicucei/assets/54428156/09728f15-90b3-4a45-92c9-4e616bbe4173)
+### Search section
+![image](https://github.com/molki3/comicucei/assets/54428156/087cec61-93d9-419a-a1d6-80a496e2f1f6)
+![image](https://github.com/molki3/comicucei/assets/54428156/6fe853e1-6909-4689-bb4f-c515c38c9066)
+### Shopping Cart
+![image](https://github.com/molki3/comicucei/assets/54428156/6a8be348-b2d4-4de2-90af-7a4011b76916)
+### Rating section
+![image](https://github.com/molki3/comicucei/assets/54428156/e4e6f43d-4ce7-4ab6-ae02-3873e82c64ab)
+
+
+
+
+tuThis is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
